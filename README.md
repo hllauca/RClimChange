@@ -10,8 +10,8 @@ Enjoy it!
 
 Instructions
 ============
-install.packages("devtools")
+1. install.packages("devtools")
 
-library(devtools)
+2. devtools::install_github("hllauca/RClimChange")
 
-install_github("hllauca/RClimChange")
+3. library(RClimChange)
