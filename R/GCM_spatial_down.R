@@ -1,11 +1,13 @@
+#' Extract a downscaled GCM data for a point of interest
+#'
+#' @param Input A 5D array (lon,lat,day,year,model) from GCM_extract_region output
+#' @param RegLon Vector of longitudes for the study area
+#' @param RegLat Vector of latitudes for the study area
+#' @param XYcoords Vector with station coordinates (lon,lat)
+#' @param YearIni Initial year to compute leap years
+#' @return GCM time series for a point of interest
+#' @export
 GCM_spatial_down <- function(Input, RegLon, RegLat, XYcoords, YearIni){
-
-
-    # Input	   : Input array 5D [lon,lat,day,year,model] from GCM_extract_region output
-    # RegLon   : Vector of longitudes for the study area
-    # RegLat   : Vector of latitudes for the study area
-    # XYcoords : Vector with station coordinates [lon,lat]
-    # YearIni  : Initial year to compute leap years
 
 
     # Create an empty matrix to store data [day x year x model]
