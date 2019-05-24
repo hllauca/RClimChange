@@ -56,7 +56,7 @@ GCM_download_data <- function(Path, FileURLs, Var, RangeLat, RangeLon){
         # Extraer nombre
         ncfname <- strsplit(URL, 'v1.0/')[[1]][2]
 
-            if (file.exist(ncfname)==FALSE){
+            if (file.exists(ncfname)==FALSE){
 
               # Descargar archivo .nc
               message(paste0('Downloading: ', ncfname))
