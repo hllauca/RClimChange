@@ -5,7 +5,7 @@ This preliminary R package contains simple tools for users to download, extract,
 
 For any suggestion please write to Harold LLauca (hllauca@gmail.com).
 
-Enjoy it
+Enjoy it!
 
 
 Instructions
