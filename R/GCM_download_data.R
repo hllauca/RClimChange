@@ -1,11 +1,11 @@
-#' Download and cut netCDF files from NASA's NEX-GDDP GCM files
+#' Download and reshape netCDF files from NASA's NEX-GDDP dataset.
 #'
-#' @param Path Directory where FileURLs is located
-#' @param FileURLs CSV file with urls to download data
-#' @param Var Variable to download data ('Pp', 'Tmax or 'Tmin')
+#' @param Path Directory where URLs files are located.
+#' @param FileURLs Filename of .csv with URLs to download GCM data.
+#' @param Var Variable to download data (Pp, Tmax or Tmin).
 #' @param RangeLat Limits of latitudes to subset data
 #' @param RangeLon Limits of longitudes to subset data
-#' @return Downloaded netCDF files for a region and variable of interes
+#' @return NEX’s netCDF files for a region and variable of interest.
 #' @export
 GCM_download_data <- function(Path, FileURLs, Var, RangeLat, RangeLon){
 
