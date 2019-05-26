@@ -27,7 +27,7 @@ List of GCMs (0.25° x 0.25°) stored in NEX-GDDP dataset:
 - NorESM1-M
 
 
-For any suggestion please write to Harold LLauca (hllauca@gmail.com).
+For any issue or suggestion please write to Harold LLauca (hllauca@gmail.com).
 
 Enjoy it!
 
