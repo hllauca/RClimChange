@@ -60,7 +60,7 @@ GCM_download_data <- function(Path, FileURLs, Var, RangeLat, RangeLon){
 
               # Descargar archivo .nc
               message(paste0('Downloading: ', ncfname))
-              download.file(URL, destfile='netCDF_File.nc', method="auto")
+              download.file(URL, destfile='netCDF_File.nc', method="libcurl")
 
 
               # Leer netCDF original
