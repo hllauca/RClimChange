@@ -3,7 +3,7 @@
 
 This preliminary R package contains simple tools to download, extract, read and process Global Climate Models (GCM) from NASA's NEX-GDDP (NASA Earth Exchange Global Daily Downscaled Projections) dataset. See in https://cds.nccs.nasa.gov/nex-gddp/ for more information about this product.
 
-GCMs in NEX-GDDP dataset:
+GCMs (0.25° x 0.25°) stored in NEX-GDDP dataset:
 - ACCESS1-0
 - bcc-csm1-1
 - BNU-ESM
