@@ -81,8 +81,8 @@ GCM_download_data <- function(FileURLs, Var, RangeLat, RangeLon){
               ncatt_put(ncout,"time","axis","T")
 
               # Close open netCDFs
-              nc_close(file.path('Downloaded',ncout))
-              nc_close(file.path('Downloaded',ncFile)
+              nc_close(ncout)
+              nc_close(ncFile)
               unlink(file.path('Downloaded','netCDF_File.nc'))
               message('Done!')
             }
