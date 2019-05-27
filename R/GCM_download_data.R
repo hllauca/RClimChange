@@ -25,13 +25,6 @@ GCM_download_data <- function(FileURLs, Var, RangeLat, RangeLon){
       Units     <- "K"
     }
 
-    # Load require packages
-    list.of.packages <- c("ncdf4", "RCurl")
-    new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-    if(length(new.packages)) install.packages(new.packages)
-    library(ncdf4)
-    library(RCurl)
-
     # Create a directory to store donloaded data
     dir.create('Downloaded')
     
