@@ -1,4 +1,5 @@
 exportPattern("^[[:alpha:]]+")
 #' @import ncdf4
+#' @import RCurl
 #' @import stringr
 #' @import tictoc
