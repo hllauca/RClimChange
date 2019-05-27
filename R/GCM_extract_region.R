@@ -8,12 +8,6 @@
 GCM_extract_region <- function(Path, Region, Var='Pp'){
 
     # Install and load require packages
-    list.of.packages <- c("ncdf4","stringr","tictoc")
-    new.packages     <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-    if(length(new.packages)) install.packages(new.packages)
-    library(ncdf4)
-    library(stringr)
-    library(tictoc)
     tic()
 
     # Read netCDFs filenames
