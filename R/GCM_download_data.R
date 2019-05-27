@@ -26,12 +26,9 @@ GCM_download_data <- function(FileURLs, Var, RangeLat, RangeLon){
     }
 
     # Load require packages
-    if("ncdf4" %in% rownames(installed.packages()) == FALSE){
-    install.packages("ncdf4")
-    }
-    if("RCurl" %in% rownames(installed.packages()) == FALSE){
-    istall.packages("RCurl")
-    }
+    list.of.packages <- c("ncdf4", "RCurl")
+    new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+    if(length(new.packages)) install.packages(new.packages)
     library(ncdf4)
     library(RCurl)
 
