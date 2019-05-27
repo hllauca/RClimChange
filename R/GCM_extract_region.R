@@ -7,28 +7,17 @@
 #' @export
 GCM_extract_region <- function(Path, Region, Var='Pp'){
 
-
-    # Load  packages
-    if("ncdf4" %in% rownames(installed.packages()) == FALSE){
-      install.packages("ncdf4")
-    }
+    # Install and load require packages
+    list.of.packages <- c("ncdf4","stringr","tictoc")
+    new.packages     <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+    if(length(new.packages)) install.packages(new.packages)
     library(ncdf4)
-
-    if("stringr" %in% rownames(installed.packages()) == FALSE){
-      install.packages("stringr")
-    }
     library(stringr)
-
-    if("tictoc" %in% rownames(installed.packages()) == FALSE){
-      install.packages("ticotc")
-    }
     library(tictoc)
     tic()
 
-
-    # Read filenames
+    # Read netCDFs filenames
     files.all <- list.files(Path, pattern='nc$')
-
 
     # Extract model's names
     names <- vector()
@@ -39,12 +28,10 @@ GCM_extract_region <- function(Path, Region, Var='Pp'){
     }
     model <- unique(names)
 
-
     # Extract initial years
     y <- strsplit(files.all[1], '[_]')
     y <- strsplit(y[[1]], '[ ]')
     y.ini <- as.numeric(str_extract(y[[7]], "...."))
-
 
     # Assign variables to numbers
     if (Var=='Pp')  {id.var <- 1}
@@ -52,7 +39,6 @@ GCM_extract_region <- function(Path, Region, Var='Pp'){
     if (Var=='Tmin'){id.var <- 3}
     var.type <-c('pr', 'tasmax','tasmin')
     location <-c('lon', 'lat')
-    
 
     # Extract array dimension
     #=========================
@@ -61,30 +47,24 @@ GCM_extract_region <- function(Path, Region, Var='Pp'){
     lon   <- ncvar_get(ncin, location[1])-360
     lat   <- ncvar_get(ncin, location[2])
 
-
     # Set extension of the study area
     min.lon <- Region[1]
     max.lon <- Region[2]
     min.lat <- Region[3]
     max.lat <- Region[4]
 
-
     # Subset lat and lon for the study area
     lon.Region <- subset(lon, (lon> min.lon) & (lon< max.lon))
     lat.Region <- subset(lat, (lat> min.lat) & (lat< max.lat))
 
-
     # Close netCDF
     nc_close(ncin)
 
-
-    # Calculate no.years
+    # Calculate numbers of years to be processes
     no.years  <- length(files.all[str_detect(files.all, paste(model[1],'_',sep=''))])
-
 
     # Create an empty 5D array [lon,lat,day,year,model]
     dta.reg <- array(NA, dim=c(length(lon.region), length(lat.region), 366, no.years, length(model)))
-
 
     # Read all netCDF files
     #======================
@@ -96,14 +76,14 @@ GCM_extract_region <- function(Path, Region, Var='Pp'){
       # Read files for each GCM model
         for (w in 1:no.files.model){
 
-          ## Show message
+          ## Show computing message
           count.all   <- round(((m)/length(model)*100),2)
           count.model <- round((w/no.files.model)*100,2)
           cat('\f')
-          print(paste('Total de modelos:...', length(model), sep=''))
-          print(paste('Modelos procesados:...', count.all,'%',sep=''))
-          print(paste('Procesando modelo Nº-',m,' ',model[m],':...', count.model,'%',sep=''))
-
+          message(paste0('Numbers of GCMs:...', length(model)))
+          message(paste0('Processing models:...', count.all,'%'))
+          message(paste0('Processing model Nº-',m,' ',model[m],':...', count.model,'%'))
+    
           # Open netCDF file
           ncin <- nc_open(paste(Path, files.model[w],sep='/'))
 
@@ -128,11 +108,11 @@ GCM_extract_region <- function(Path, Region, Var='Pp'){
 
 
   # Output variables
-   Yreturn <- list(data=dta.reg, lat=lat.region, lon=lon.region, model=model, yini=y.ini, var=var, per=period)
+   Yreturn <- list(data=dta.reg, lat=lat.region, lon=lon.region, model=model, yini=y.ini, var=var)
    return(Yreturn)
-
 
    # Show computing time
    toc()
    alarm()
 }
+# End (not run)
