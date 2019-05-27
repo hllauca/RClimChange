@@ -1,7 +1,7 @@
 Package: RClimChange
 Type: Package
 Title: A package to manipulate GCM data from NEX-GDDP dataset
-Version: 1.0.0
+Version: 1.1.0
 Author: Harold Llauca <hllauca@gmail.com>
 Maintainer: Harold Llauca <hllauca@gmail.com>
 Description: This package contain simple tools to download, extract, read and process Global Climate Models (GCM) from NASA's NEX-GDDP dataset.
