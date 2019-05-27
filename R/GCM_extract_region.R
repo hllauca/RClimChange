@@ -7,9 +7,7 @@
 #' @export
 GCM_extract_region <- function(Path, Region, Var='Pp'){
 
-    # Install and load require packages
     tic()
-
     # Read netCDFs filenames
     files.all <- list.files(Path, pattern='nc$')
 
