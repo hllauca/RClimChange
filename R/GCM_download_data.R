@@ -104,6 +104,7 @@ GCM_download_data <- function(Path, FileURLs, Var, RangeLat, RangeLon){
 
               # Cerrar y guardar archivo netCDF
               nc_close(ncout)
+              nc_close(ncFile)
               unlink('netCDF_File.nc')
               message('Done!')
             }
