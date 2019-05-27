@@ -9,10 +9,8 @@
 #' @export
 GCM_spatial_down <- function(Input, RegLon, RegLat, XYcoords, YearIni){
 
-
     # Create an empty matrix to store data [day x year x model]
     dta.gcm <- array(NA, dim=c(365, dim(Input)[4], dim(Input)[5]))
-
 
     # Read files for each model
     for (m in 1:dim(Input)[5]){
@@ -78,10 +76,8 @@ GCM_spatial_down <- function(Input, RegLon, RegLat, XYcoords, YearIni){
       dta.gcm.est[c(1:length(dta.gcm.vec)),ww] <- round(dta.gcm.vec,2)
     }
 
-
     # Create dates
     dates <- seq(as.Date(paste(YearIni,'1/1', sep='/')), as.Date(paste(YearIni+dim(Input)[4]-1,'12/31', sep='/')), by='day')
-
 
     # Remove leaps
     dates <- dates[format(dates, "%m %d") != "02 29"]
@@ -90,3 +86,4 @@ GCM_spatial_down <- function(Input, RegLon, RegLat, XYcoords, YearIni){
     Yreturn <- list(est=dta.gcm.est, dates=dates)
     return(Yreturn)
 }
+# End (not run)
