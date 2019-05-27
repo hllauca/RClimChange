@@ -1,15 +1,14 @@
 #' Download and reshape netCDF files from NASA's NEX-GDDP dataset.
 #'
-#' @param Path Directory where URLs files are located.
-#' @param FileURLs Filename of .csv with URLs to download GCM data.
-#' @param Var Variable to download data (Pp, Tmax or Tmin).
-#' @param RangeLat Limits of latitudes to subset data
-#' @param RangeLon Limits of longitudes to subset data
-#' @return NEX’s netCDF files for a region and variable of interest.
+#' @param FileURLs CSV file with URLs to download GCM data.
+#' @param Var Variable (Pp, Tmax or Tmin) to be downloaded .
+#' @param RangeLat Limits of latitudes to subset data.
+#' @param RangeLon Limits of longitudes to subset data.
+#' @return NEX’s netCDF files for an study region and variable of interest.
 #' @export
 GCM_download_data <- function(FileURLs, Var, RangeLat, RangeLon){
 
-    # Conditional to identify a variable process
+    # Conditional to identify the selected variable
     if (Var=='Pp'){
       Variable  <- 'pr'
       NameVar   <- "Precipitation"
@@ -92,8 +91,8 @@ GCM_download_data <- function(FileURLs, Var, RangeLat, RangeLon){
               ncatt_put(ncout,"time","axis","T")
 
               # Close open netCDFs
-              nc_close(ncout)
-              nc_close(file.path('Downloaded',ncFile))
+              nc_close(file.path('Downloaded',ncout))
+              nc_close(file.path('Downloaded',ncFile)
               unlink(file.path('Downloaded','netCDF_File.nc'))
               message('Done!')
             }
