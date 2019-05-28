@@ -1,15 +1,20 @@
 #' Read subset and built a 5D array with netCDF GCM's files
 #'
-#' @param Path Directory where netCDF files are located
-#' @param Region Lat/lon limits for subseting data (MinLon, MaxLon, MinLat, MaxLat)
-#' @param Var Type of hidrometeorological variable to process GCM (Precipitation:'Pp', Maximum Temperature:'Tmax or Minimum Temperature:'Tmin'). 'Pp' as default
-#' @return 5D array [lon,lat,day,year,model] with GCM subset data
+#' @param Path.GCM Directory where GCM netCDF files are located.
+#' @param Region Lat/Lon ranges for subsetting data (MinLon, MaxLon, MinLat, MaxLat).
+#' @param Var Variable of intereset to be extracted (Pp, Tmax or Tmin).
+#' @return 5D array [lon,lat,day,year,model] with GCM subset data.
 #' @export
-GCM_extract_region <- function(Path, Region, Var='Pp'){
+GCM_extract_region <- function(Path.GCM, Region, Var){
 
+    # Load packages
+    library(netcdf4)
+    library(stringr)
+    library(tictoc)
     tic()
+
     # Read netCDFs filenames
-    files.all <- list.files(Path, pattern='nc$')
+    files.all <- list.files(Path.GCM, pattern='nc$')
 
     # Extract model's names
     names <- vector()
@@ -35,7 +40,7 @@ GCM_extract_region <- function(Path, Region, Var='Pp'){
     # Extract array dimension
     #=========================
     # Extract latitudes and longitudes from a referential netCDF file
-    ncin  <- nc_open(paste(Path, files.all[1], sep='/'))
+    ncin  <- nc_open(paste(Path.GCM, files.all[1], sep='/'))
     lon   <- ncvar_get(ncin, location[1])-360
     lat   <- ncvar_get(ncin, location[2])
 
@@ -56,7 +61,7 @@ GCM_extract_region <- function(Path, Region, Var='Pp'){
     no.years  <- length(files.all[str_detect(files.all, paste(model[1],'_',sep=''))])
 
     # Create an empty 5D array [lon,lat,day,year,model]
-    dta.reg <- array(NA, dim=c(length(lon.region), length(lat.region), 366, no.years, length(model)))
+    dta.reg   <- array(NA, dim=c(length(lon.region), length(lat.region), 366, no.years, length(model)))
 
     # Read all netCDF files
     #======================
@@ -72,12 +77,12 @@ GCM_extract_region <- function(Path, Region, Var='Pp'){
           count.all   <- round(((m)/length(model)*100),2)
           count.model <- round((w/no.files.model)*100,2)
           cat('\f')
-          message(paste0('Numbers of GCMs:...', length(model)))
+          message(paste0('Total of GCMs:...', length(model)))
           message(paste0('Processing models:...', count.all,'%'))
           message(paste0('Processing model Nº-',m,' ',model[m],':...', count.model,'%'))
-    
+
           # Open netCDF file
-          ncin <- nc_open(paste(Path, files.model[w],sep='/'))
+          ncin <- nc_open(paste(Path.GCM, files.model[w],sep='/'))
 
           # Read netCDF data
           lon.gcm <- ncvar_get(ncin, location[1])-360
@@ -85,7 +90,7 @@ GCM_extract_region <- function(Path, Region, Var='Pp'){
           lon.reg <- subset(lon.gcm, (lon.gcm> min.lon) & (lon.gcm< max.lon))
           lat.reg <- subset(lat.gcm, (lat.gcm> min.lat) & (lat.gcm< max.lat))
 
-          # Identify variable
+          # Fix variables
           if (var=='Pp'){
             dta <- ncvar_get(ncin, var.type[id.var])*86400
           } else {
@@ -101,10 +106,10 @@ GCM_extract_region <- function(Path, Region, Var='Pp'){
 
   # Output variables
    Yreturn <- list(data=dta.reg, lat=lat.region, lon=lon.region, model=model, yini=y.ini, var=var)
-   return(Yreturn)
 
-   # Show computing time
+   # Show computing time and results
    toc()
    alarm()
+   return(Yreturn)
 }
 # End (not run)

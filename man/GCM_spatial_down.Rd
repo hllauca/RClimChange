@@ -4,21 +4,23 @@
 \alias{GCM_spatial_down}
 \title{Extract a downscaled GCM data for a point of interest}
 \usage{
-GCM_spatial_down(Input, RegLon, RegLat, XYcoords, YearIni)
+GCM_spatial_down(Input, RegLon, RegLat, XYcoords, YearIni, b = 2)
 }
 \arguments{
-\item{Input}{A 5D array (lon,lat,day,year,model) from GCM_extract_region output}
+\item{Input}{5D array [lon,lat,day,year,model] with GCM subset data.}
 
-\item{RegLon}{Vector of longitudes for the study area}
+\item{RegLon}{Vector of longitudes for the study area.}
 
-\item{RegLat}{Vector of latitudes for the study area}
+\item{RegLat}{Vector of latitudes for the study area.}
 
-\item{XYcoords}{Vector with station coordinates (lon,lat)}
+\item{XYcoords}{Station coordinates (lon, lat) for downscaling data.}
 
-\item{YearIni}{Initial year to compute leap years}
+\item{YearIni}{Initial year of data (to compute leap years).}
+
+\item{b}{IDW exponent (2 as default).}
 }
 \value{
-GCM time series for a point of interest
+GCM time series for a point of interest.
 }
 \description{
 Extract a downscaled GCM data for a point of interest

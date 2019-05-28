@@ -1,13 +1,14 @@
 #' Extract a downscaled GCM data for a point of interest
 #'
-#' @param Input A 5D array (lon,lat,day,year,model) from GCM_extract_region output
-#' @param RegLon Vector of longitudes for the study area
-#' @param RegLat Vector of latitudes for the study area
-#' @param XYcoords Vector with station coordinates (lon,lat)
-#' @param YearIni Initial year to compute leap years
-#' @return GCM time series for a point of interest
+#' @param Input 5D array [lon,lat,day,year,model] with GCM subset data.
+#' @param RegLon Vector of longitudes for the study area.
+#' @param RegLat Vector of latitudes for the study area.
+#' @param XYcoords Station coordinates (lon, lat) for downscaling data.
+#' @param YearIni Initial year of data (to compute leap years).
+#' @param b IDW exponent (2 as default).
+#' @return GCM time series for a point of interest.
 #' @export
-GCM_spatial_down <- function(Input, RegLon, RegLat, XYcoords, YearIni){
+GCM_spatial_down <- function(Input, RegLon, RegLat, XYcoords, YearIni, b=2){
 
     # Create an empty matrix to store data [day x year x model]
     dta.gcm <- array(NA, dim=c(365, dim(Input)[4], dim(Input)[5]))
@@ -50,7 +51,7 @@ GCM_spatial_down <- function(Input, RegLon, RegLat, XYcoords, YearIni){
 
           # Apply an IDW interpolation
           dist     <- (dist.lat^2 + dist.lon^2)^0.5
-          dist.inv <- 1/dist^2
+          dist.inv <- 1/dist^b
           dta.est  <- (A*dist.inv[1] + B*dist.inv[2]+
                        C*dist.inv[3] + D*dist.inv[4])/sum(dist.inv)
 

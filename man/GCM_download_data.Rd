@@ -2,24 +2,22 @@
 % Please edit documentation in R/GCM_download_data.R
 \name{GCM_download_data}
 \alias{GCM_download_data}
-\title{Download and cut netCDF files from NASA's NEX-GDDP GCM files}
+\title{Download and reshape netCDF files from NASA's NEX-GDDP dataset.}
 \usage{
-GCM_download_data(Path, FileURLs, Var, RangeLat, RangeLon)
+GCM_download_data(FileURLs, Var, RangeLat, RangeLon)
 }
 \arguments{
-\item{Path}{Directory where FileURLs is located}
+\item{FileURLs}{Text file with NEX-GDDP URLs to be downloaded.}
 
-\item{FileURLs}{CSV file with urls to download data}
+\item{Var}{Variable of interest to be downloaded (Pp, Tmax or Tmin).}
 
-\item{Var}{Variable to download data ('Pp', 'Tmax or 'Tmin')}
+\item{RangeLat}{Range (min,max) of latitudes to subset data.}
 
-\item{RangeLat}{Limits of latitudes to subset data}
-
-\item{RangeLon}{Limits of longitudes to subset data}
+\item{RangeLon}{Range (min,max) of longitudes to subset data.}
 }
 \value{
-Downloaded netCDF files for a region and variable of interes
+NetCDF files extracted for an study region and variable of interest.
 }
 \description{
-Download and cut netCDF files from NASA's NEX-GDDP GCM files
+Download and reshape netCDF files from NASA's NEX-GDDP dataset.
 }

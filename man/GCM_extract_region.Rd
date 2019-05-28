@@ -4,19 +4,17 @@
 \alias{GCM_extract_region}
 \title{Read subset and built a 5D array with netCDF GCM's files}
 \usage{
-GCM_extract_region(Path, Region, Period = "Historical", Var = "Pp")
+GCM_extract_region(Path.GCM, Region, Var)
 }
 \arguments{
-\item{Path}{Directory where netCDF files are located}
+\item{Path.GCM}{Directory where GCM netCDF files are located.}
 
-\item{Region}{Region limits to subset data (MinLon, MaxLon, MinLat, MaxLat)}
+\item{Region}{Lat/Lon ranges for subsetting data (MinLon, MaxLon, MinLat, MaxLat).}
 
-\item{Period}{Select period to analysis- Could be 'Historical' or 'Future'. 'Historical' for default}
-
-\item{Var}{Select the variable to process ('Pp', 'Tmax or 'Tmin'). 'Pp' data for default}
+\item{Var}{Variable of intereset to be extracted (Pp, Tmax or Tmin).}
 }
 \value{
-5D array with GCM data
+5D array [lon,lat,day,year,model] with GCM subset data.
 }
 \description{
 Read subset and built a 5D array with netCDF GCM's files

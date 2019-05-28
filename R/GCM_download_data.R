@@ -1,12 +1,17 @@
 #' Download and reshape netCDF files from NASA's NEX-GDDP dataset.
 #'
-#' @param FileURLs CSV file with URLs to download GCM data.
-#' @param Var Variable (Pp, Tmax or Tmin) to be downloaded .
-#' @param RangeLat Limits of latitudes to subset data.
-#' @param RangeLon Limits of longitudes to subset data.
-#' @return NEX’s netCDF files for an study region and variable of interest.
+#' @param FileURLs Text file with NEX-GDDP URLs to be downloaded.
+#' @param Var Variable of interest to be downloaded (Pp, Tmax or Tmin).
+#' @param RangeLat Range (min,max) of latitudes to subset data.
+#' @param RangeLon Range (min,max) of longitudes to subset data.
+#' @return NetCDF files extracted for an study region and variable of interest.
 #' @export
 GCM_download_data <- function(FileURLs, Var, RangeLat, RangeLon){
+
+    # Load packages
+    library(ncdf4)
+    library(RCurl)
+    library(tictoc)
 
     # Conditional to identify the selected variable
     if (Var=='Pp'){
@@ -26,30 +31,30 @@ GCM_download_data <- function(FileURLs, Var, RangeLat, RangeLon){
     }
 
     # Create a directory to store donloaded data
-    dir.create('Downloaded')
-    
+    dir.create(Variable)
+
     # Load and read URLs from a .csv file
-    Links  <- read.table(FileURLs, sep=',', header=F)
+    Links  <- read.table(FileURLs, header=F)
     nLinks <- nrow(Links)
 
     # Start a loop
     for (i in 1:nLinks){
-        
+
         # Read the NEX-GDDP URL to download
         URL    <- as.vector(Links[i,])
 
         # Extract netCDF filename
         ncfname <- strsplit(URL, 'v1.0/')[[1]][2]
-    
+
             # Download just in case filename doesn't exist yet
             if (file.exists(ncfname)==FALSE){
 
               # Download netCDF file
               message(paste0('Downloading: ', ncfname))
-              download.file(URL, destfile=file.path('Downloaded','netCDF_File.nc'), method="libcurl")
+              download.file(URL, destfile=file.path(Variable,'netCDF_File.nc'), method="libcurl")
 
               # Read netCDF file
-              ncFile <- nc_open(file.path('Downloaded','netCDF_File.nc'))
+              ncFile <- nc_open(file.path(Variable,'netCDF_File.nc'))
               var    <- ncvar_get(ncFile, Variable)
               lat    <- ncvar_get(ncFile, 'lat')
               lon    <- ncvar_get(ncFile, 'lon')
@@ -70,7 +75,7 @@ GCM_download_data <- function(FileURLs, Var, RangeLat, RangeLon){
               VarDef   <- ncvar_def(Variable, Units, list(londim,latdim,timedim), fillvalue, NameVar, prec="single")
 
               # Create a netCDF
-              ncout <- nc_create(file.path('Downloaded',ncfname),list(VarDef),force_v4=T)
+              ncout <- nc_create(file.path(Variable,ncfname),list(VarDef),force_v4=T)
 
               # Assign variables
               ncvar_put(ncout,VarDef,var.reg)
@@ -83,7 +88,7 @@ GCM_download_data <- function(FileURLs, Var, RangeLat, RangeLon){
               # Close open netCDFs
               nc_close(ncout)
               nc_close(ncFile)
-              unlink(file.path('Downloaded','netCDF_File.nc'))
+              unlink(file.path(Variable,'netCDF_File.nc'))
               message('Done!')
             }
         }
