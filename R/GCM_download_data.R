@@ -47,7 +47,7 @@ GCM_download_data <- function(FileURLs, Var, RangeLat, RangeLon){
         ncfname <- strsplit(URL, 'v1.0/')[[1]][2]
 
             # Download just in case filename doesn't exist yet
-            if (file.exists(ncfname)==FALSE){
+            if (file.exists(file.path(Variable, ncfname)) == FALSE){
 
               # Download netCDF file
               message(paste0('Downloading: ', ncfname))
