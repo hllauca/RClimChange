@@ -5,14 +5,14 @@
 #' @param RangeLat Range (min,max) of latitudes to subset data.
 #' @param RangeLon Range (min,max) of longitudes to subset data.
 #' @return NetCDF files extracted for an study region and variable of interest.
-#' @examples 
+#' @examples
 #' require(RClimChange)
-#' 
-#' GCM_download_data(FileURLs='pr_rcp4.5', #Download precipitation for RCP 4.5
-#' 				     Variable='pr',
+#'
+#' GCM_download_data(FileURLs='pr_rcp4.5.txt', #Download precipitation for RCP 4.5
+#'                   Variable='pr',
 #'                   RangeLat=c(-20.5,3.2),
 #'                   RangeLon=c(277.5,295.6)) #Extent for Peru
-#' 
+#'
 #' @export
 GCM_download_data <- function(FileURLs, Variable='pr', RangeLat, RangeLon){
 
@@ -57,7 +57,7 @@ GCM_download_data <- function(FileURLs, Variable='pr', RangeLat, RangeLon){
               # Download netCDF file
               message(paste0('Downloading: ', ncfname))
               message(paste0('Downloading file ',i,' of ',nLinks))
-              message(paste0('Please wait...'))  
+              message(paste0('Please wait...'))
               download.file(URL, destfile=file.path(Variable,'netCDF_File.nc'), method="libcurl")
 
               # Read netCDF file

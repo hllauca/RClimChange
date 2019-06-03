@@ -4,12 +4,12 @@
 \alias{GCM_download_data}
 \title{Download and reshape netCDF files from NASA's NEX-GDDP dataset.}
 \usage{
-GCM_download_data(FileURLs, Var, RangeLat, RangeLon)
+GCM_download_data(FileURLs, Variable = "pr", RangeLat, RangeLon)
 }
 \arguments{
 \item{FileURLs}{Text file with NEX-GDDP URLs to be downloaded.}
 
-\item{Var}{Variable of interest to be downloaded (Pp, Tmax or Tmin).}
+\item{Variable}{Variable of interest to be downloaded (pr, tasmax or tasmin). 'pr' as default.}
 
 \item{RangeLat}{Range (min,max) of latitudes to subset data.}
 
@@ -20,4 +20,13 @@ NetCDF files extracted for an study region and variable of interest.
 }
 \description{
 Download and reshape netCDF files from NASA's NEX-GDDP dataset.
+}
+\examples{
+require(RClimChange)
+
+GCM_download_data(FileURLs='pr_rcp4.5.txt', #Download precipitation for RCP 4.5
+                  Variable='pr',
+                  RangeLat=c(-20.5,3.2),
+                  RangeLon=c(277.5,295.6)) #Extent for Peru
+
 }
