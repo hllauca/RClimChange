@@ -1,12 +1,12 @@
 #' Download and reshape netCDF files from NASA's NEX-GDDP dataset.
 #'
 #' @param FileURLs Text file with NEX-GDDP URLs to be downloaded.
-#' @param Var Variable of interest to be downloaded (Pp, Tmax or Tmin).
+#' @param Variable Variable of interest to be downloaded (pr, tasmax or tasmin). 'pr' as default.
 #' @param RangeLat Range (min,max) of latitudes to subset data.
 #' @param RangeLon Range (min,max) of longitudes to subset data.
 #' @return NetCDF files extracted for an study region and variable of interest.
 #' @export
-GCM_download_data <- function(FileURLs, Var, RangeLat, RangeLon){
+GCM_download_data <- function(FileURLs, Variable='pr', RangeLat, RangeLon){
 
     # Load packages
     library(ncdf4)
@@ -14,18 +14,15 @@ GCM_download_data <- function(FileURLs, Var, RangeLat, RangeLon){
     library(tictoc)
 
     # Conditional to identify the selected variable
-    if (Var=='Pp'){
-      Variable  <- 'pr'
+    if (Variable=='pr'){
       NameVar   <- "Precipitation"
       Units     <- "kg m-2 s-1"
     }
-    if (Var=='Tmax'){
-      Variable  <- 'tasmax'
+    if (Variable=='tasmax'){
       NameVar   <- "Daily Maximum Near-Surface Air Temperature"
       Units     <- "K"
     }
-    if (Var=='Tmin'){
-      Variable  <- 'tasmin'
+    if (Variable=='tasmin'){
       NameVar   <- "Daily Minimum Near-Surface Air Temperature"
       Units     <- "K"
     }
@@ -74,7 +71,7 @@ GCM_download_data <- function(FileURLs, Var, RangeLat, RangeLon){
 
               # Define netCDF variables
               fillvalue <- 1.00000002004088e+20
-              VarDef   <- ncvar_def(Variable, Units, list(londim,latdim,timedim), fillvalue, NameVar, prec="single")
+              VarDef    <- ncvar_def(Variable, Units, list(londim,latdim,timedim), fillvalue, NameVar, prec="single")
 
               # Create a netCDF
               ncout <- nc_create(file.path(Variable,ncfname),list(VarDef),force_v4=T)
