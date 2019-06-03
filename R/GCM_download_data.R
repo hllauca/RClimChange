@@ -51,6 +51,8 @@ GCM_download_data <- function(FileURLs, Var, RangeLat, RangeLon){
 
               # Download netCDF file
               message(paste0('Downloading: ', ncfname))
+              message(paste0('Downloading file ',i,' of ',nLinks))
+              message(paste0('Please wait...'))  
               download.file(URL, destfile=file.path(Variable,'netCDF_File.nc'), method="libcurl")
 
               # Read netCDF file
