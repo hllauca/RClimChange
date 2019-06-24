@@ -8,7 +8,7 @@ Description: This package contain simple tools to download, extract, read and pr
 License: HLL-16
 Encoding: UTF-8
 Depends:
-    R (>= 3.5),
+    R (>= 3.6),
 Imports:
   ncdf4,
   RCurl,

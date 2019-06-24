@@ -14,6 +14,9 @@
 #'                   RangeLon=c(277.5,295.6)) #Extent for Peru
 #'
 #' @export
+#' @import  ncdf4
+#' @import  RCurl
+#' @import  tictoc
 GCM_download_data <- function(FileURLs, Variable='pr', RangeLat, RangeLon){
 
     # Load packages
@@ -61,6 +64,8 @@ GCM_download_data <- function(FileURLs, Variable='pr', RangeLat, RangeLon){
               download.file(URL, destfile=file.path(Variable,'netCDF_File.nc'), method="libcurl")
 
               # Read netCDF file
+              message(paste0('Cutting original netCDf file'))
+              message(paste0('Please wait...'))
               ncFile <- nc_open(file.path(Variable,'netCDF_File.nc'))
               var    <- ncvar_get(ncFile, Variable)
               lat    <- ncvar_get(ncFile, 'lat')
@@ -97,6 +102,8 @@ GCM_download_data <- function(FileURLs, Variable='pr', RangeLat, RangeLon){
               nc_close(ncFile)
               unlink(file.path(Variable,'netCDF_File.nc'))
               message('Done!')
+              message(' ')
+              message(' ')
             }
         }
   }

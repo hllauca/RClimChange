@@ -5,10 +5,13 @@
 #' @param Var Variable of intereset to be extracted (Pp, Tmax or Tmin).
 #' @return 5D array [lon,lat,day,year,model] with GCM subset data.
 #' @export
+#' @import ncdf4
+#' @import stringr
+#' @import tictoc
 GCM_extract_region <- function(Path.GCM, Region, Var){
 
     # Load packages
-    library(netcdf4)
+    library(ncdf4)
     library(stringr)
     library(tictoc)
     tic()
