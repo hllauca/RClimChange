@@ -58,15 +58,16 @@ GCM_download_data <- function(FileURLs, Variable='pr', RangeLat, RangeLon){
             if (file.exists(file.path(Variable, ncfname)) == FALSE){
 
               # Download netCDF file
+              cat('\f')
               message(paste0('Downloading: ', ncfname))
-              message(paste0('Downloading file ',i,' of ',nLinks))
+              message(paste0('File ',i,' of ',nLinks))
               message(paste0('Please wait...'))
-              download.file(URL, destfile=file.path(Variable,'netCDF_File.nc'), method="libcurl")
+              download.file(URL, destfile=file.path(Variable,'Temporal_file.nc'), method="libcurl")
 
               # Read netCDF file
-              message(paste0('Cutting original netCDf file'))
+              message(paste0('Subseting data and saving a new netcdf'))
               message(paste0('Please wait...'))
-              ncFile <- nc_open(file.path(Variable,'netCDF_File.nc'))
+              ncFile <- nc_open(file.path(Variable,'Temporal_file.nc'))
               var    <- ncvar_get(ncFile, Variable)
               lat    <- ncvar_get(ncFile, 'lat')
               lon    <- ncvar_get(ncFile, 'lon')
@@ -97,10 +98,10 @@ GCM_download_data <- function(FileURLs, Variable='pr', RangeLat, RangeLon){
               ncatt_put(ncout,"lat","axis","Y")
               ncatt_put(ncout,"time","axis","T")
 
-              # Close open netCDFs
+              # Close opened files
               nc_close(ncout)
               nc_close(ncFile)
-              unlink(file.path(Variable,'netCDF_File.nc'))
+              unlink(file.path(Variable,'Temporal_file.nc'))
               message('Done!')
               message(' ')
               message(' ')
