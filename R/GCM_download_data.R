@@ -11,7 +11,7 @@
 #' GCM_download_data(FileURLs='pr_rcp4.5.txt', #Download precipitation for RCP 4.5
 #'                   Variable='pr',
 #'                   RangeLat=c(-20.5,3.2),
-#'                   RangeLon=c(277.5,295.6)) #Extent for Peru
+#'                   RangeLon=c(-82.5,-64.4)) #Extent for Peru
 #'
 #' @export
 #' @import  ncdf4
@@ -74,7 +74,7 @@ GCM_download_data <- function(FileURLs, Variable='pr', RangeLat, RangeLon){
               time   <- ncvar_get(ncFile, 'time')
 
               # Subset data for a study area
-              lon.reg <- subset(lon, (lon> RangeLon[1]) & (lon< RangeLon[2]))
+              lon.reg <- subset(lon, (lon> (RangeLon[1]+360)) & (lon< (RangeLon[2]+360)))
               lat.reg <- subset(lat, (lat> RangeLat[1]) & (lat< RangeLat[2]))
               var.reg <- var[match(lon.reg, lon), match(lat.reg, lat),] # [longitud, latitud, tiempo]
 
