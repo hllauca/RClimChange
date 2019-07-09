@@ -27,6 +27,6 @@ require(RClimChange)
 GCM_download_data(FileURLs='pr_rcp4.5.txt', #Download precipitation for RCP 4.5
                   Variable='pr',
                   RangeLat=c(-20.5,3.2),
-                  RangeLon=c(277.5,295.6)) #Extent for Peru
+                  RangeLon=c(-82.5,-64.4)) #Extent for Peru
 
 }
