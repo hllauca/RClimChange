@@ -33,6 +33,7 @@ For any issue or suggestion please write to Harold LLauca (hllauca@gmail.com).
 
 Enjoy it!
 
+Warning: There might be some problems for Windows users. I recommend to use Linux or Mac OS!!!!!!!!!!!!!!!
 
 Instructions
 ============
