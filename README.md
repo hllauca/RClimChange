@@ -1,7 +1,7 @@
 'RClimChange' package
 ========================
 
-This preliminary R package contains simple tools to download, extract, read and process Global Climate Models (GCM) from NASA's NEX-GDDP (NASA Earth Exchange Global Daily Downscaled Projections) dataset. See in https://cds.nccs.nasa.gov/nex-gddp/ for more information about this product.
+This preliminary R package contains simple tools to download, extract, read and process Global Climate Models (GCM) from NASA's NEX-GDDP (NASA Earth Exchange Global Daily Downscaled Projections) dataset. See in https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp for more information about this product.
 
 You can download URLs in a text file from: https://drive.google.com/open?id=1yr3iDTPyPds6QZy_exW7COkEUKmzqnc6
 
