@@ -1,4 +1,4 @@
-Warning: This package needs to be updated and is inoperative!!!
+Warning: This package needs to be updated and is now inoperative!!!
 
 
 
