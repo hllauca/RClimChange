@@ -1,17 +1,17 @@
 #' Download CMIP6 daily data from NCCS THREDDS NEX-GDDP-CMIP6
-#' "https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6"
-#' 
 #' @param location Work directory to store downloaded data.
 #' @param model Model names from "https://ds.nccs.nasa.gov/thredds/catalog/AMES/NEX/GDDP-CMIP6/catalog.html". If NULL, all 35 models will be downloaded.
-#' @param scenario Choose the scenario to be downloaded ('historical','ssp245','ssp585). More information in "https://www.nccs.nasa.gov/sites/default/files/NEX-GDDP-CMIP6-Tech_Note.pdf". 
+#' @param scenario Choose the scenario to be downloaded ('historical','ssp245','ssp585). More information in "https://www.nccs.nasa.gov/sites/default/files/NEX-GDDP-CMIP6-Tech_Note.pdf".
 #' @param variable Choose the variable to be downloaded ('pr':precipitation,'tas': mean air temperature ,'tasmin': minimum air temperature,'tasmax': maximum air temperature). 'pr' as default.
-#' @param years Choose data years to be downloaded  (from 1950 to2014 for the 'historical' scenario, and from 2015 to 2100 for 'ssp245' and 'ssp585' scenarios). 
+#' @param years Choose data years to be downloaded  (from 1950 to2014 for the 'historical' scenario, and from 2015 to 2100 for 'ssp245' and 'ssp585' scenarios).
 #' @param roi Region of interest coordinates for subsetting data. Please insert c(xmin, xmax, ymin, ymax). If NULL, data with the original extension will be downloaded.
 #' @param method Method to be used for downloading files. Current download methods are 'internal', 'wininet' (Windows only), 'libcurl', 'wget' and 'curl'.'libcurl' as default.
 #' @return CMIP6 daily data (in netCDF format) for the region of interest.
+#' @export
 #' @examples
 #' require(RClimChange)
-#' 
+#'
+#' # Download daily precipitation (in mm/d) from the BCC-CSM2-MR model for 1990 and the Peruvian domain
 #' gcm_download_data <- function(location=getwd(),
 #'                               model='BCC-CSM2-MR',
 #'                               scenario='historical',
@@ -19,8 +19,7 @@
 #'                               years=1990,
 #'                               roi=c(-86,-66,-20,2), # extent for the Peruvian domain
 #'                               method='libcurl')
-#' 
-#' @export
+#'
 #' @import  ncdf4
 #' @import  RCurl
 #' @import  tictoc
@@ -32,19 +31,7 @@ gcm_download_data <- function(location,
                               years,
                               roi,
                               method='libcurl'){
-  
-  # require(RCurl)
-  # require(ncdf4)
-  # require(tictoc)
-  # location <- '/Users/harold/Desktop/test'
-  # model    <- 'BCC-CSM2-MR'
-  # scenario <- 'historical'
-  # variable <- 'tasmax'
-  # years    <- 1990
-  # roi      <- c(-86,-66,-20,2)
-  # method   <- 'libcurl'
-  
-  
+
   tic()
   # If "model=NULL", all available models will be downloaded
   if(is.null(model)==TRUE){
@@ -53,28 +40,28 @@ gcm_download_data <- function(location,
                'NorESM2-MM',
                'NorESM2-LM',
                'NESM3',
-               'MRI-ESM2-0',     
+               'MRI-ESM2-0',
                'MPI-ESM1-2-LR',
                'MPI-ESM1-2-HR',
-               'MIROC6',        
+               'MIROC6',
                'MIROC-ES2L',
                'KIOST-ESM',
-               'KACE-1-0-G',    
+               'KACE-1-0-G',
                'IPSL-CM6A-LR',
                'INM-CM5-0',
-               'INM-CM4-8',     
+               'INM-CM4-8',
                'IITM-ESM',
                'HadGEM3-GC31-MM',
                'HadGEM3-GC31-LL',
                'GISS-E2-1-G',
                'GFDL-ESM4',
-               'GFDL-CM4_gr2',    
+               'GFDL-CM4_gr2',
                'GFDL-CM4',
                'FGOALS-g3',
                'EC-Earth3-Veg-LR',
                'EC-Earth3',
                'CanESM5',
-               'CNRM-ESM2-1',     
+               'CNRM-ESM2-1',
                'CNRM-CM6-1',
                'CMCC-ESM2',
                'CMCC-CM2-SR5',
@@ -84,23 +71,23 @@ gcm_download_data <- function(location,
                'ACCESS-ESM1-5',
                'ACCESS-CM2')
   }
-  
-  # Download data for the required  years 
+
+  # Download data for the required  years
   nmodels <- length(model)
   nyrs    <- length(years)
   for(i in 1:nmodels){
     for(j in 1:nyrs){
-      
+
       # Show message
       cat('\f')
       message(paste0('Downloading ',model[i],' (',i,'/',nmodels,')',' for ',years[j],' (',j,'/',nyrs,')'))
-      
+
       # Assign auxiliary variables
       mod   <- model[i]
       yr    <- years[j]
       per   <- scenario
       var   <- variable
-      
+
       # Show error message
       if((yr>2014 & per=='historical')==TRUE | (yr<=2014 & per!='historical')==TRUE){
         message('ERROR: There is no more data to download from this scenario')
@@ -109,21 +96,21 @@ gcm_download_data <- function(location,
         dir.create(file.path(location,var))
         dir.create(file.path(location,var,per))
         dir.create(file.path(location,var,per,mod))
-        
+
         # Select runs for each model
         if(mod %in% c('TaiESM1',
                       'NorESM2-MM',
                       'NorESM2-LM',
                       'NESM3',
-                      'MRI-ESM2-0',     
+                      'MRI-ESM2-0',
                       'MPI-ESM1-2-LR',
                       'MPI-ESM1-2-HR',
                       'MIROC6',
                       'KIOST-ESM',
-                      'KACE-1-0-G',    
+                      'KACE-1-0-G',
                       'IPSL-CM6A-LR',
                       'INM-CM5-0',
-                      'INM-CM4-8',     
+                      'INM-CM4-8',
                       'IITM-ESM',
                       'GFDL-ESM4',
                       'GFDL-CM4_gr2',
@@ -157,19 +144,19 @@ gcm_download_data <- function(location,
         if(mod %in% c('CESM2')){
           run <- 'r4i1p1f1'
         }
-        
+
         # Fix URLs from "https://ds.nccs.nasa.gov/thredds/catalog/AMES/NEX/GDDP-CMIP6/catalog.html"
         filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gn_', yr,'.nc')
         folder   <- paste0(mod,'/',per,'/',run,'/',var,'/')
         url      <- paste0('https://ds.nccs.nasa.gov/thredds/fileServer/AMES/NEX/GDDP-CMIP6/',
                            folder, filename)
-        
+
         # Download and subsetting data
         if(is.null(roi)==FALSE){
           # Downloading raw data
           tempfile <- file.path(location,var,per,mod,'temp_file.nc')
           switch <- try(download.file(url=url, destfile=tempfile, method=method))
-          
+
           # Reading data
           if(class(switch)!='try-error'){
             nc   <- nc_open(tempfile)
@@ -212,7 +199,7 @@ gcm_download_data <- function(location,
               missval  <- 1e+20
             }
             time <- ncvar_get(nc, 'time')
-            
+
             # Subsetting data
             xmin    <- roi[1]
             xmax    <- roi[2]
@@ -221,7 +208,7 @@ gcm_download_data <- function(location,
             lon_sub <- subset(lon, lon>=xmin & lon<=xmax)
             lat_sub <- rev(subset(lat, lat>=ymin & lat<=ymax))
             dat_sub <- dat[match(lon_sub, lon), match(lat_sub, lat),]
-            
+
             # Create a new file
             londim    <- ncdim_def(name="lon",
                                    units=lon_name,
@@ -234,7 +221,7 @@ gcm_download_data <- function(location,
                                    vals=as.double(time),
                                    calendar='360_day')
             vardef    <- ncvar_def(name=var,
-                                   units=units, 
+                                   units=units,
                                    dim=list(londim,latdim,timedim),
                                    missval=missval,
                                    longname=longname,

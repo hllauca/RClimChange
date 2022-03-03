@@ -12,7 +12,6 @@ Depends:
 Imports:
   ncdf4,
   RCurl,
-  stringr,
   tictoc
 LazyData: true
 RoxygenNote: 7.1.2
