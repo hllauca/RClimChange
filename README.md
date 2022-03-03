@@ -1,43 +1,17 @@
-Warning: This package needs to be updated and is now inoperative!!!
-
-
-
 'RClimChange' package
 ========================
 
-This preliminary R package contains simple tools to download, extract, read and process Global Climate Models (GCM) from NASA's NEX-GDDP (NASA Earth Exchange Global Daily Downscaled Projections) dataset for CMIP5. See in https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp for more information about this product.
-
-You can download URLs in a text file from: https://drive.google.com/open?id=1yr3iDTPyPds6QZy_exW7COkEUKmzqnc6
-
-List of GCMs (0.25° x 0.25°) stored in NEX-GDDP dataset:
-- ACCESS1-0
-- bcc-csm1-1
-- BNU-ESM
-- CanESM2
-- CCSM4
-- CESM1-BGC
-- CNRM-CM5
-- CSIRO-Mk3-6-0
-- GFDL-CM3
-- GFDL-ESM2G
-- GFDL-ESM2M
-- inmcm4
-- IPSL-CM5A-LR
-- IPSL-CM5A-MR
-- MIROC-ESM-CHEM
-- MIROC-ESM
-- MIROC5
-- MPI-ESM-LR
-- MPI-ESM-MR
-- MRI-CGCM3
-- NorESM1-M
+This is an experimental R package that contains a simple function for downloading and subsetting daily Global Climate Models (GCM) from NASA Earth Exchange Global Daily Downscaled Projections (NEX-GDDP-CMIP6). Future versions will consider additional functions to process and bias-correct GCMs.
 
 
-For any issue or suggestion please write to Harold LLauca (hllauca@gmail.com).
+Readers can find more data set details in: https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6
 
-Enjoy it!
+NEX-GDDP-CMIP6 Technical Note is available in: https://www.nccs.nasa.gov/sites/default/files/NEX-GDDP-CMIP6-Tech_Note.pdf
 
-Warning: There might be some problems for Windows users. I recommend to use Linux or Mac OS!!!!!!!!!!!!!!!
+Access to data catalog in: https://ds.nccs.nasa.gov/thredds/catalog/AMES/NEX/GDDP-CMIP6/catalog.html
+
+For any issue or suggestion please write to Harold LLauca (hllauca@senamhi.gob.pe).
+
 
 Instructions
 ============
