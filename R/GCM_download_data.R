@@ -1,9 +1,9 @@
 #' Download CMIP6 daily data from NCCS THREDDS NEX-GDDP-CMIP6
 #' @param location Work directory to store downloaded data.
 #' @param model Model names from "https://ds.nccs.nasa.gov/thredds/catalog/AMES/NEX/GDDP-CMIP6/catalog.html". If NULL, all 35 models will be downloaded.
-#' @param scenario Choose the scenario to be downloaded ('historical','ssp245','ssp585). More information in "https://www.nccs.nasa.gov/sites/default/files/NEX-GDDP-CMIP6-Tech_Note.pdf".
-#' @param variable Choose the variable to be downloaded ('pr':precipitation,'tas': mean air temperature ,'tasmin': minimum air temperature,'tasmax': maximum air temperature). 'pr' as default.
-#' @param years Choose data years to be downloaded  (from 1950 to2014 for the 'historical' scenario, and from 2015 to 2100 for 'ssp245' and 'ssp585' scenarios).
+#' @param scenario Choose the scenario to be downloaded ('historical','ssp245', or 'ssp585). More information in "https://www.nccs.nasa.gov/sites/default/files/NEX-GDDP-CMIP6-Tech_Note.pdf".
+#' @param variable Choose the variable to be downloaded ('pr':precipitation,'tas': mean air temperature ,'tasmin': minimum air temperature, or 'tasmax': maximum air temperature).
+#' @param years Choose data years to be downloaded  (from 1950 to 2014 for the 'historical' scenario, and from 2015 to 2100 for 'ssp245' and 'ssp585' scenarios).
 #' @param roi Region of interest coordinates for subsetting data. Please insert c(xmin, xmax, ymin, ymax). If NULL, data with the original extension will be downloaded.
 #' @param method Method to be used for downloading files. Current download methods are 'internal', 'wininet' (Windows only), 'libcurl', 'wget' and 'curl'.'libcurl' as default.
 #' @return CMIP6 daily data (in netCDF format) for the region of interest.
@@ -18,7 +18,7 @@
 #'                   scenario='historical',
 #'                   variable='pr',
 #'                   years=1990,
-#'                   roi=c(-86,-66,-20,2), # extent for the Peruvian domain
+#'                   roi=c(-86,-66,-20,2),
 #'                   method='libcurl')
 #'
 #' @import  ncdf4
@@ -159,6 +159,10 @@ gcm_download_data <- function(location,
           switch <- try(download.file(url=url, destfile=tempfile, method=method))
 
           # Reading data
+          xmin    <- roi[1]
+          xmax    <- roi[2]
+          ymin    <- roi[3]
+          ymax    <- roi[4]
           if(class(switch)!='try-error'){
             nc   <- nc_open(tempfile)
             if(ymin<0){
@@ -202,10 +206,6 @@ gcm_download_data <- function(location,
             time <- ncvar_get(nc, 'time')
 
             # Subsetting data
-            xmin    <- roi[1]
-            xmax    <- roi[2]
-            ymin    <- roi[3]
-            ymax    <- roi[4]
             lon_sub <- subset(lon, lon>=xmin & lon<=xmax)
             lat_sub <- rev(subset(lat, lat>=ymin & lat<=ymax))
             dat_sub <- dat[match(lon_sub, lon), match(lat_sub, lat),]

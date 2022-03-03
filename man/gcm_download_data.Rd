@@ -19,11 +19,11 @@ gcm_download_data(
 
 \item{model}{Model names from "https://ds.nccs.nasa.gov/thredds/catalog/AMES/NEX/GDDP-CMIP6/catalog.html". If NULL, all 35 models will be downloaded.}
 
-\item{scenario}{Choose the scenario to be downloaded ('historical','ssp245','ssp585). More information in "https://www.nccs.nasa.gov/sites/default/files/NEX-GDDP-CMIP6-Tech_Note.pdf".}
+\item{scenario}{Choose the scenario to be downloaded ('historical','ssp245', or 'ssp585). More information in "https://www.nccs.nasa.gov/sites/default/files/NEX-GDDP-CMIP6-Tech_Note.pdf".}
 
-\item{variable}{Choose the variable to be downloaded ('pr':precipitation,'tas': mean air temperature ,'tasmin': minimum air temperature,'tasmax': maximum air temperature). 'pr' as default.}
+\item{variable}{Choose the variable to be downloaded ('pr':precipitation,'tas': mean air temperature ,'tasmin': minimum air temperature, or 'tasmax': maximum air temperature).}
 
-\item{years}{Choose data years to be downloaded  (from 1950 to2014 for the 'historical' scenario, and from 2015 to 2100 for 'ssp245' and 'ssp585' scenarios).}
+\item{years}{Choose data years to be downloaded  (from 1950 to 2014 for the 'historical' scenario, and from 2015 to 2100 for 'ssp245' and 'ssp585' scenarios).}
 
 \item{roi}{Region of interest coordinates for subsetting data. Please insert c(xmin, xmax, ymin, ymax). If NULL, data with the original extension will be downloaded.}
 
@@ -45,7 +45,7 @@ gcm_download_data(location=getwd(),
                   scenario='historical',
                   variable='pr',
                   years=1990,
-                  roi=c(-86,-66,-20,2), # extent for the Peruvian domain
+                  roi=c(-86,-66,-20,2),
                   method='libcurl')
 
 }
