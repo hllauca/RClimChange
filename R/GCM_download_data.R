@@ -9,16 +9,17 @@
 #' @return CMIP6 daily data (in netCDF format) for the region of interest.
 #' @export
 #' @examples
+#' # Load package
 #' require(RClimChange)
 #'
 #' # Download daily precipitation (in mm/d) from the BCC-CSM2-MR model for 1990 and the Peruvian domain
-#' gcm_download_data <- function(location=getwd(),
-#'                               model='BCC-CSM2-MR',
-#'                               scenario='historical',
-#'                               variable='pr',
-#'                               years=1990,
-#'                               roi=c(-86,-66,-20,2), # extent for the Peruvian domain
-#'                               method='libcurl')
+#' gcm_download_data(location=getwd(),
+#'                   model='BCC-CSM2-MR',
+#'                   scenario='historical',
+#'                   variable='pr',
+#'                   years=1990,
+#'                   roi=c(-86,-66,-20,2), # extent for the Peruvian domain
+#'                   method='libcurl')
 #'
 #' @import  ncdf4
 #' @import  RCurl
