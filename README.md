@@ -22,3 +22,8 @@ In order to use this package please take a look at the following instructions.
 2. devtools::install_github("hllauca/RClimChange")
 
 3. library(RClimChange)
+
+
+Terms of use
+============
+The use of this experimental package is under your responsibility. Please use this code with caution, it may contain undetected bugs.

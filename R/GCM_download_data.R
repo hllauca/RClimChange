@@ -165,62 +165,81 @@ gcm_download_data <- function(location,
           ymax    <- roi[4]
           if(class(switch)!='try-error'){
             nc   <- nc_open(tempfile)
-            if(ymin<0){
-              lat      <- ncvar_get(nc, 'lat')
-              lat_name <- "degrees_south"
-            }else{
-              lat      <- ncvar_get(nc, 'lat')
-              lat_name <- "degrees_north"
-            }
+
+            # First dimension
             if(xmax<0 & xmin<0){
               lon    <- ncvar_get(nc, 'lon')-360
-              lon_name <- "degrees_west"
+              lonunits <- "degrees_west"
             }else{
               lon  <- ncvar_get(nc, 'lon')
-              lon_name <- "degrees_east"
+              lonunits <- "degrees_east"
             }
+
+            # Second dimension
+            if(ymin<0){
+              lat      <- ncvar_get(nc, 'lat')
+              latunits <- "degrees_south"
+            }else{
+              lat      <- ncvar_get(nc, 'lat')
+              latunits <- "degrees_north"
+            }
+
+            # Third dimension
+            time   <- ncvar_get(nc, 'time')
+            tunits <- ncatt_get(nc,"time","units")$value
+            ntime  <- length(time)
+            if(ntime==360){
+              calendar <- '360_day'
+            }
+            if(ntime==365){
+              calendar <- '365_day'
+            }
+            if(ntime==366){
+              calendar <- 'standard'
+            }
+
+            # Read variables
             if(var=='pr'){
               dat      <- ncvar_get(nc, var)*86400
               units    <- 'mm/d'
-              longname <- 'Precipitation'
-              missval  <- 1e+20
+              longname <- ncatt_get(nc,"pr","long_name")$value
+              missval  <- ncatt_get(nc,"pr","_FillValue")$value*86400
             }
             if(var=='tas'){
               dat      <- ncvar_get(nc, var)-273
               units    <- 'Degrees Celsius'
-              longname <- 'Daily Near-Surface Air Temperature'
-              missval  <- 1e+20
+              longname <- ncatt_get(nc,"tas","long_name")$value
+              missval  <- ncatt_get(nc,"tas","_FillValue")$value-273
+            }
+            if(var=='tasmax'){
+              dat      <- ncvar_get(nc, var)-273
+              units    <- 'Degrees Celsius'
+              longname <- ncatt_get(nc,"tasmax","long_name")$value
+              missval  <- ncatt_get(nc,"tasmax","_FillValue")$value-273
             }
             if(var=='tasmin'){
               dat      <- ncvar_get(nc, var)-273
               units    <- 'Degrees Celsius'
-              longname <- 'Daily Minimum Near-Surface Air Temperature'
-              missval  <- 1e+20
+              longname <- ncatt_get(nc,"tasmin","long_name")$value
+              missval  <- ncatt_get(nc,"tasmin","_FillValue")$value-273
             }
-            if(var=='tasmin'){
-              dat      <- ncvar_get(nc, var)-273
-              units    <- 'Degrees Celsius'
-              longname <- 'Daily Maximum Near-Surface Air Temperature'
-              missval  <- 1e+20
-            }
-            time <- ncvar_get(nc, 'time')
 
             # Subsetting data
             lon_sub <- subset(lon, lon>=xmin & lon<=xmax)
             lat_sub <- rev(subset(lat, lat>=ymin & lat<=ymax))
             dat_sub <- dat[match(lon_sub, lon), match(lat_sub, lat),]
 
-            # Create a new file
+            # Create a new netcdf file
             londim    <- ncdim_def(name="lon",
-                                   units=lon_name,
+                                   units=lonunits,
                                    vals=as.double(lon_sub))
             latdim    <- ncdim_def(name="lat",
-                                   units="degrees_south",
+                                   units=latunits,
                                    vals=as.double(lat_sub))
             timedim   <- ncdim_def(name="time",
-                                   units='days since 1850-01-01',
+                                   units=tunits,
                                    vals=as.double(time),
-                                   calendar='360_day')
+                                   calendar=calendar)
             vardef    <- ncvar_def(name=var,
                                    units=units,
                                    dim=list(londim,latdim,timedim),
@@ -240,7 +259,7 @@ gcm_download_data <- function(location,
             gc()
           }
         }else{
-          # Download original raw data
+          # Download original data for the entire globe
           destfile <- file.path('.',var,per,mod,filename)
           switch   <- try(download.file(url=url, destfile=destfile))
           gc()
