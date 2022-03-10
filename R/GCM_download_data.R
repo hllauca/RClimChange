@@ -5,8 +5,7 @@
 #' @param variable Choose the variable to be downloaded ('pr':precipitation,'tas': mean air temperature ,'tasmin': minimum air temperature, or 'tasmax': maximum air temperature).
 #' @param years Choose data years to be downloaded  (from 1950 to 2014 for the 'historical' scenario, and from 2015 to 2100 for 'ssp245' and 'ssp585' scenarios).
 #' @param roi Region of interest coordinates for subsetting data. Please insert c(xmin, xmax, ymin, ymax). If NULL, data with the original extension will be downloaded.
-#' @param method Method to be used for downloading files. Current download methods are 'internal', 'wininet' (Windows only), 'libcurl', 'wget' and 'curl'.'curl' as default.
-#' @param mode character. The mode with which to write the file. Useful values are "w", "wb" (binary), "a" (append) and "ab". Not used for methods "wget" and "curl".  "wb" recommend for Windows.
+#' @param method Method to be used for downloading files. Current download methods are 'internal', 'wininet' (Windows only), 'libcurl', 'wget' and 'curl'.The 'curl' method is recommended for Windows users.
 #' @return CMIP6 daily data (in netCDF format) for the region of interest.
 #' @export
 #' @examples
@@ -32,8 +31,7 @@ gcm_download_data <- function(location,
                               variable,
                               years,
                               roi,
-                              method='curl',
-                              mode=NULL){
+                              method='curl'){
 
   tic()
   # If "model=NULL", all available models will be downloaded
@@ -158,11 +156,7 @@ gcm_download_data <- function(location,
         if(is.null(roi)==FALSE){
           # Downloading raw data
           tempfile <- file.path(location,var,per,mod,'temp_file.nc')
-          if(is.null(mode)==TRUE){
-            switch <- try(download.file(url=url, destfile=tempfile, method=method))
-          }else{
-            switch <- try(download.file(url=url, destfile=tempfile, method=method, mode=mode))
-          }
+          switch <- try(download.file(url=url, destfile=tempfile, method=method))
 
           # Reading data
           xmin    <- roi[1]
@@ -248,13 +242,9 @@ gcm_download_data <- function(location,
         }else{
           # Download original raw data
           destfile <- file.path('.',var,per,mod,filename)
-          if(is.null(mode)==TRUE){
-            switch   <- try(download.file(url=url, destfile=destfile))
-            gc()
-          }else{
-            switch   <- try(download.file(url=url, destfile=destfile, method=method))
-            gc()
-          }
+          switch   <- try(download.file(url=url, destfile=destfile))
+          gc()
+
         }
       }
     }
