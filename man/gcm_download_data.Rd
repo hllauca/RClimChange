@@ -11,7 +11,8 @@ gcm_download_data(
   variable,
   years,
   roi,
-  method = "libcurl"
+  method = "curl",
+  mode = NULL
 )
 }
 \arguments{
@@ -27,7 +28,9 @@ gcm_download_data(
 
 \item{roi}{Region of interest coordinates for subsetting data. Please insert c(xmin, xmax, ymin, ymax). If NULL, data with the original extension will be downloaded.}
 
-\item{method}{Method to be used for downloading files. Current download methods are 'internal', 'wininet' (Windows only), 'libcurl', 'wget' and 'curl'.'libcurl' as default.}
+\item{method}{Method to be used for downloading files. Current download methods are 'internal', 'wininet' (Windows only), 'libcurl', 'wget' and 'curl'.'curl' as default.}
+
+\item{mode}{character. The mode with which to write the file. Useful values are "w", "wb" (binary), "a" (append) and "ab". Not used for methods "wget" and "curl".  "wb" recommend for Windows.}
 }
 \value{
 CMIP6 daily data (in netCDF format) for the region of interest.
@@ -46,6 +49,6 @@ gcm_download_data(location=getwd(),
                   variable='pr',
                   years=1990,
                   roi=c(-86,-66,-20,2),
-                  method='libcurl')
+                  method='curl')
 
 }
