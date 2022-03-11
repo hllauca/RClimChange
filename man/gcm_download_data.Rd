@@ -2,7 +2,7 @@
 % Please edit documentation in R/gcm_download_data.R
 \name{gcm_download_data}
 \alias{gcm_download_data}
-\title{Download CMIP6 daily data from NCCS THREDDS NEX-GDDP-CMIP6}
+\title{Download CMIP6 daily data from NCCS THREDDS NEX-GDDP-CMIP6 (https://www.nccs.nasa.gov/sites/default/files/NEX-GDDP-CMIP6-Tech_Note.pdf)}
 \usage{
 gcm_download_data(
   location,
@@ -17,29 +17,29 @@ gcm_download_data(
 \arguments{
 \item{location}{Work directory to store downloaded data.}
 
-\item{model}{Model names from "https://ds.nccs.nasa.gov/thredds/catalog/AMES/NEX/GDDP-CMIP6/catalog.html". If NULL, all 35 models will be downloaded.}
+\item{model}{Model names to download. If NULL, all available models will be selected.}
 
-\item{scenario}{Choose the scenario to be downloaded ('historical','ssp245', or 'ssp585). More information in "https://www.nccs.nasa.gov/sites/default/files/NEX-GDDP-CMIP6-Tech_Note.pdf".}
+\item{scenario}{Choose the scenario to be downloaded ('historical','ssp245', or 'ssp585).}
 
-\item{variable}{Choose the variable to be downloaded ('pr':precipitation,'tas': mean air temperature ,'tasmin': minimum air temperature, or 'tasmax': maximum air temperature).}
+\item{variable}{Choose the variable to be downloaded ('hurs','huss','pr','rlds','rsds','sfcWind','tas','tasmax', or 'tasmin').}
 
-\item{years}{Choose data years to be downloaded  (from 1950 to 2014 for the 'historical' scenario, and from 2015 to 2100 for 'ssp245' and 'ssp585' scenarios).}
+\item{years}{Choose data years to be downloaded  (1950-2014 for 'historical' and 2015-2100 for 'ssp245' and 'ssp585').}
 
-\item{roi}{Region of interest coordinates for subsetting data. Please insert c(xmin, xmax, ymin, ymax). If NULL, data with the original extension will be downloaded.}
+\item{roi}{Vector of coordinates for subsetting data (xmin, xmax, ymin, ymax). If NULL, original extension data will be downloaded.}
 
-\item{method}{Method to be used for downloading files. Current download methods are 'internal', 'wininet' (Windows only), 'libcurl', 'wget' and 'curl'.The 'curl' method is recommended for Windows users.}
+\item{method}{Method to be used for downloading files. Current download methods are 'internal', 'wininet' (Windows only), 'libcurl', 'wget' and 'curl'. The 'curl' method is recommended for Windows users.}
 }
 \value{
-CMIP6 daily data (in netCDF format) for the region of interest.
+CMIP6 daily data (in netCDF format).
 }
 \description{
-Download CMIP6 daily data from NCCS THREDDS NEX-GDDP-CMIP6
+Download CMIP6 daily data from NCCS THREDDS NEX-GDDP-CMIP6 (https://www.nccs.nasa.gov/sites/default/files/NEX-GDDP-CMIP6-Tech_Note.pdf)
 }
 \examples{
 # Load package
 require(RClimChange)
 
-# Download daily precipitation (in mm/d) from the BCC-CSM2-MR model for 1990 and the Peruvian domain
+# Download daily precipitation (in mm/d) from the BCC-CSM2-MR model; for 1990 and the Peruvian domain
 gcm_download_data(location=getwd(),
                   model='BCC-CSM2-MR',
                   scenario='historical',
