@@ -3,14 +3,64 @@
 
 This is an experimental R package that contains a simple function for downloading and subsetting daily Global Climate Models (GCM) from NASA Earth Exchange Global Daily Downscaled Projections (NEX-GDDP-CMIP6). Future versions will consider additional functions to process and bias-correct GCMs.
 
+Available GCMs:
+- UKESM1-0-LL
+- TaiESM1
+- NorESM2-MM
+- NorESM2-LM
+- NESM3
+- MRI-ESM2-0',
+- MPI-ESM1-2-LR
+- MPI-ESM1-2-HR
+- MIROC6
+- MIROC-ES2L
+- KIOST-ESM
+- KACE-1-0-G
+- IPSL-CM6A-LR
+- INM-CM5-0
+- INM-CM4-8
+- IITM-ESM
+- HadGEM3-GC31-MM
+- HadGEM3-GC31-LL
+- GISS-E2-1-G
+- GFDL-ESM4
+- GFDL-CM4_gr2
+- GFDL-CM4
+- FGOALS-g3
+- EC-Earth3-Veg-LR
+- EC-Earth3
+- CanESM5
+- CNRM-ESM2-1
+- CNRM-CM6-1
+- CMCC-ESM2
+- CMCC-CM2-SR5
+- CESM2-WACCM
+- CESM2
+- BCC-CSM2-MR
+- ACCESS-ESM1-5
+- ACCESS-CM2
 
 Readers can find more data set details in: https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6
 
-NEX-GDDP-CMIP6 Technical Note is available in: https://www.nccs.nasa.gov/sites/default/files/NEX-GDDP-CMIP6-Tech_Note.pdf
 
-Access to data catalog in: https://ds.nccs.nasa.gov/thredds/catalog/AMES/NEX/GDDP-CMIP6/catalog.html
+Summary
+=======
+Short Name: NEX-GDDP-CMIP6
+Version: 1
+Format: netCDF4
 
-For any issue or suggestion please write to Harold LLauca (hllauca@senamhi.gob.pe).
+Coverage:
+West Bounding Coordinate: 180° W
+East Bounding Coordinate: 180° E
+North Bounding Coordinate: 90° N
+South Bounding Coordinate: 60° S
+
+Data Resolution:
+Latitude Resolution: 0.25 degrees (25 km)
+Longitude Resolution: 0.25 degrees (25 km)
+Temporal Resolution: daily
+
+Total Dataset Size: 18 TB (without subsetting)
 
 
 Instructions
@@ -24,6 +74,6 @@ In order to use this package please take a look at the following instructions.
 3. library(RClimChange)
 
 
-Terms of use
-============
-The use of this experimental package is under your responsibility. Please use this code with caution, it may contain undetected bugs.
+Contact
+========
+Harold LLauca (hllauca@senamhi.gob.pe).
