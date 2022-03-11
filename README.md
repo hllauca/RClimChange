@@ -9,7 +9,7 @@ Available GCMs:
 - NorESM2-MM
 - NorESM2-LM
 - NESM3
-- MRI-ESM2-0',
+- MRI-ESM2-0
 - MPI-ESM1-2-LR
 - MPI-ESM1-2-HR
 - MIROC6
