@@ -1,4 +1,4 @@
-#' Download CMIP6 daily data from NCCS THREDDS NEX-GDDP-CMIP6 (https://www.nccs.nasa.gov/sites/default/files/NEX-GDDP-CMIP6-Tech_Note.pdf)
+#' Download CMIP6 daily data from NCCS THREDDS NEX-GDDP-CMIP6.
 #' @param location Work directory to store downloaded data.
 #' @param model Model names to download. If NULL, all available models will be selected.
 #' @param scenario Choose the scenario to be downloaded ('historical','ssp245', or 'ssp585).
@@ -99,7 +99,7 @@ gcm_download_data <- function(location,
           # Conditional by variable names
           if(var %in% c('hurs','huss','pr','rlds','rsds','sfcWind','tas','tasmax','tasmin')){
             # Conditional by available years
-            if((yr>2014 & per=='historical')==FALSE | (yr<=2014 & per!='historical')==FALSE){
+            if((yr<=2014 & per=='historical')==TRUE | (yr>2014 & per!='historical')==TRUE){
 
               # Show message
               cat('\f')
