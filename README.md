@@ -1,9 +1,11 @@
 'RClimChange' package
 ========================
 
-This is an experimental R package that contains a simple function for downloading and subsetting daily Global Climate Models (GCM) from NASA Earth Exchange Global Daily Downscaled Projections (NEX-GDDP-CMIP6). Future versions will consider additional functions to process and bias-correct GCMs.
+This is an experimental package with a function for downloading and subsetting daily Global Climate Models (GCM) from NASA Earth Exchange Global Daily Downscaled Projections (NEX-GDDP-CMIP6). Readers can find more data set details in: https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6
 
-Available GCMs:
+Future implementations will consider additional functions to post-process and bias-correct this data set.
+
+Available GCMs
 - UKESM1-0-LL
 - TaiESM1
 - NorESM2-MM
@@ -40,32 +42,35 @@ Available GCMs:
 - ACCESS-ESM1-5
 - ACCESS-CM2
 
-Readers can find more data set details in: https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6
-
+Available variables
+- hurs: Near-Surface Relative Humidity in [%].
+- huss: Near-Surface Relative Humidity in [kg/kg].
+- pr: Precipitation (mean of the daily precipitation rate) in [kg m-2 s-1] or [mm/d].
+- rlds: Surface Downwelling Longwave Radiation in [W m-2].
+- rsds: Surface Downwelling Shortwave Radiation in [W m-2].
+- sfcWind: Daily-Mean Near-Surface Wind Speed in [m s-1]
+- tas: Daily Near-Surface Air Temperature in [K] or [ºC].
+- tasmax: Daily Maximum Near-Surface Air Temperature in [K] or [ºC].
+- tasmin: Daily Minimum Near-Surface Air Temperature in [K] or [ºC].
 
 Summary
 =======
-Short Name: NEX-GDDP-CMIP6
-Version: 1
-Format: netCDF4
-
-Coverage:
-West Bounding Coordinate: 180° W
-East Bounding Coordinate: 180° E
-North Bounding Coordinate: 90° N
-South Bounding Coordinate: 60° S
-
-Data Resolution:
-Latitude Resolution: 0.25 degrees (25 km)
-Longitude Resolution: 0.25 degrees (25 km)
-Temporal Resolution: daily
-
-Total Dataset Size: 18 TB (without subsetting)
+- Short Name: NEX-GDDP-CMIP6
+- Version: 1
+- Format: netCDF4
+- West Bounding Coordinate: 180° W
+- East Bounding Coordinate: 180° E
+- North Bounding Coordinate: 90° N
+- South Bounding Coordinate: 60° S
+- Latitude Resolution: 0.25 degrees (25 km)
+- Longitude Resolution: 0.25 degrees (25 km)
+- Temporal Resolution: daily
+- Total Dataset Size: 18 TB (without subsetting)
 
 
 Instructions
 ============
-In order to use this package please take a look at the following instructions.
+Please take a look at the following instructions.
 
 1. install.packages("devtools")
 
@@ -76,4 +81,4 @@ In order to use this package please take a look at the following instructions.
 
 Contact
 ========
-Harold LLauca (hllauca@senamhi.gob.pe).
+Harold LLauca (hllauca@senamhi.gob.pe)
