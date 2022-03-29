@@ -53,6 +53,12 @@ Available variables
 - tasmax: Daily Maximum Near-Surface Air Temperature in [K] or [ºC].
 - tasmin: Daily Minimum Near-Surface Air Temperature in [K] or [ºC].
 
+Available scenarios
+- ssp126
+- ssp245
+- ssp370
+- ssp585
+
 Summary
 =======
 - Short Name: NEX-GDDP-CMIP6

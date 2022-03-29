@@ -1,9 +1,9 @@
 #' Download CMIP6 daily data from NCCS THREDDS NEX-GDDP-CMIP6.
 #' @param location Work directory to store downloaded data.
 #' @param model Model names to download. If NULL, all available models will be selected.
-#' @param scenario Choose the scenario to be downloaded ('historical','ssp245', or 'ssp585).
+#' @param scenario Choose the scenario to be downloaded ('historical','ssp126','ssp245', 'ssp370',or 'ssp585). Some models could haven't all scenarios.
 #' @param variable Choose the variable to be downloaded ('hurs','huss','pr','rlds','rsds','sfcWind','tas','tasmax', or 'tasmin').
-#' @param years Choose data years to be downloaded  (1950-2014 for 'historical' and 2015-2100 for 'ssp245' and 'ssp585').
+#' @param years Choose data years to be downloaded  (1950-2014 for 'historical' and 2015-2100 for 'ssp126', 'ssp245', 'ssp370' and 'ssp585').
 #' @param roi Vector of coordinates for subsetting data (xmin, xmax, ymin, ymax). If NULL, original extension data will be downloaded.
 #' @param method Method to be used for downloading files. Current download methods are 'internal', 'wininet' (Windows only), 'libcurl', 'wget' and 'curl'. The 'curl' method is recommended for Windows users.
 #' @return CMIP6 daily data (in netCDF format).
@@ -93,7 +93,7 @@ gcm_download_data <- function(location,
       var   <- variable
 
       # Conditional by scenario names
-      if(per %in% c('historical','ssp245','ssp585')){
+      if(per %in% c('historical','ssp126','ssp245','ssp370','ssp585')){
         # Conditional by model names
         if(mod %in% gcm){
           # Conditional by variable names
@@ -159,7 +159,49 @@ gcm_download_data <- function(location,
               }
 
               # Fix URLs from "https://ds.nccs.nasa.gov/thredds/catalog/AMES/NEX/GDDP-CMIP6/catalog.html"
-              filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gn_', yr,'.nc')
+              if(mod %in% c('KACE-1-0-G',
+                            'IPSL-CM6A-LR',
+                            'EC-Earth3-Veg-LR',
+                            'EC-Earth3',
+                            'CNRM-ESM2-1',
+                            'CNRM-CM6-1')){
+                filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr_', yr,'.nc')
+              }
+              if(mod %in% c('KIOST-ESM',
+                            'INM-CM5-0',
+                            'INM-CM4-8',
+                            'GFDL-ESM4',
+                            'GFDL-CM4')){
+                filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr1_', yr,'.nc')
+              }
+              if(mod %in% c('GFDL-CM4_gr2')){
+                filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr2_', yr,'.nc')
+              }
+              if(mod %in% c('UKESM1-0-LL',
+                            'TaiESM1',
+                            'NorESM2-MM',
+                            'NorESM2-LM',
+                            'NESM3',
+                            'MRI-ESM2-0',
+                            'MPI-ESM1-2-LR',
+                            'MPI-ESM1-2-HR',
+                            'MIROC6',
+                            'MIROC-ES2L',
+                            'IITM-ESM',
+                            'HadGEM3-GC31-MM',
+                            'HadGEM3-GC31-LL',
+                            'GISS-E2-1-G',
+                            'FGOALS-g3',
+                            'CanESM5',
+                            'CMCC-ESM2',
+                            'CMCC-CM2-SR5',
+                            'CESM2-WACCM',
+                            'CESM2',
+                            'BCC-CSM2-MR',
+                            'ACCESS-ESM1-5',
+                            'ACCESS-CM2')){
+                filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gn_', yr,'.nc')
+              }
               folder   <- paste0(mod,'/',per,'/',run,'/',var,'/')
               url      <- paste0('https://ds.nccs.nasa.gov/thredds/fileServer/AMES/NEX/GDDP-CMIP6/',
                                  folder, filename)
