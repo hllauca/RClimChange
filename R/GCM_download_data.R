@@ -3,7 +3,7 @@
 #' @param model Model names to download. If NULL, all available models will be selected.
 #' @param scenario Choose the scenario to be downloaded ('historical','ssp126','ssp245', 'ssp370',or 'ssp585). Some models could haven't all scenarios.
 #' @param variable Choose the variable to be downloaded ('hurs','huss','pr','rlds','rsds','sfcWind','tas','tasmax', or 'tasmin').
-#' @param years Choose data years to be downloaded  (1950-2014 for 'historical' and 2015-2100 for 'ssp126', 'ssp245', 'ssp370' and 'ssp585').
+#' @param years Choose data years to be downloaded  (1950:2014 for 'historical' and 2015:2100 for 'ssp126', 'ssp245', 'ssp370' and 'ssp585').
 #' @param roi Vector of coordinates for subsetting data (xmin, xmax, ymin, ymax). If NULL, original extension data will be downloaded.
 #' @param method Method to be used for downloading files. Current download methods are 'internal', 'wininet' (Windows only), 'libcurl', 'wget' and 'curl'. The 'curl' method is recommended for Windows users.
 #' @return CMIP6 daily data (in netCDF format).
@@ -203,8 +203,9 @@ gcm_download_data <- function(location,
                 filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gn_', yr,'.nc')
               }
               folder   <- paste0(mod,'/',per,'/',run,'/',var,'/')
-              url      <- paste0('https://ds.nccs.nasa.gov/thredds/fileServer/AMES/NEX/GDDP-CMIP6/',
+              url      <- paste0('https://portal.nccs.nasa.gov/datashare/nexgddp_cmip6/',
                                  folder, filename)
+
 
               # Download and subsetting data
               if(is.null(roi)==FALSE){

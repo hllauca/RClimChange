@@ -23,7 +23,7 @@ gcm_download_data(
 
 \item{variable}{Choose the variable to be downloaded ('hurs','huss','pr','rlds','rsds','sfcWind','tas','tasmax', or 'tasmin').}
 
-\item{years}{Choose data years to be downloaded  (1950-2014 for 'historical' and 2015-2100 for 'ssp126', 'ssp245', 'ssp370' and 'ssp585').}
+\item{years}{Choose data years to be downloaded  (1950:2014 for 'historical' and 2015:2100 for 'ssp126', 'ssp245', 'ssp370' and 'ssp585').}
 
 \item{roi}{Vector of coordinates for subsetting data (xmin, xmax, ymin, ymax). If NULL, original extension data will be downloaded.}
 
