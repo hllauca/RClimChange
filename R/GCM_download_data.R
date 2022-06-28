@@ -23,6 +23,7 @@
 #'
 #' @import  ncdf4
 #' @import  RCurl
+#' @import  data.table
 #' @import  tictoc
 
 gcm_download_data <- function(location,
@@ -35,6 +36,11 @@ gcm_download_data <- function(location,
 
 
   tic()
+
+  # Read available filenames
+  x <- fread('https://portal.nccs.nasa.gov/datashare/nexgddp_cmip6/gddp-cmip6-thredds-fileserver.csv')
+  gfiles <- grep(pattern=paste0(var,'_day_',mod), x$fileUrl, value=T)
+
   # Available models
   gcm   <- c('UKESM1-0-LL',
              'TaiESM1',
@@ -203,155 +209,159 @@ gcm_download_data <- function(location,
                 filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gn_', yr,'.nc')
               }
               folder   <- paste0(mod,'/',per,'/',run,'/',var,'/')
-              url      <- paste0('https://portal.nccs.nasa.gov/datashare/nexgddp_cmip6/',
+              url      <- paste0('https://ds.nccs.nasa.gov/thredds2/fileServer/AMES/NEX/GDDP-CMIP6/',
                                  folder, filename)
 
+              # Check available files
+              if(url %in% gfiles){
 
-              # Download and subsetting data
-              if(is.null(roi)==FALSE){
-                # Downloading raw data
-                tempfile <- file.path(location,var,per,mod,'temp_file.nc')
-                switch <- try(download.file(url=url, destfile=tempfile, method=method))
+                # Download and subsetting data
+                if(is.null(roi)==FALSE){
 
-                # Reading data
-                xmin    <- roi[1]
-                xmax    <- roi[2]
-                ymin    <- roi[3]
-                ymax    <- roi[4]
-                if(class(switch)!='try-error'){
-                  nc   <- nc_open(tempfile)
+                    # Downloading raw data
+                    tempfile <- file.path(location,var,per,mod,'temporal_file.nc')
+                    download.file(url=url, destfile=tempfile, method=method)
 
-                  # First dimension
-                  if(xmax<0 & xmin<0){
-                    lon    <- ncvar_get(nc, 'lon')-360
-                    lonunits <- "degrees_west"
-                  }else{
-                    lon  <- ncvar_get(nc, 'lon')
-                    lonunits <- "degrees_east"
-                  }
+                    # Reading data
+                    xmin    <- roi[1]
+                    xmax    <- roi[2]
+                    ymin    <- roi[3]
+                    ymax    <- roi[4]
 
-                  # Second dimension
-                  if(ymin<0){
-                    lat      <- ncvar_get(nc, 'lat')
-                    latunits <- "degrees_south"
-                  }else{
-                    lat      <- ncvar_get(nc, 'lat')
-                    latunits <- "degrees_north"
-                  }
+                    # Open netcdf
+                    nc   <- nc_open(tempfile)
 
-                  # Third dimension
-                  time   <- ncvar_get(nc, 'time')
-                  tunits <- ncatt_get(nc,"time","units")$value
-                  ntime  <- length(time)
-                  if(ntime==360){
-                    calendar <- '360_day'
-                  }
-                  if(ntime==365){
-                    calendar <- '365_day'
-                  }
-                  if(ntime==366){
-                    calendar <- 'standard'
-                  }
+                    # First dimension
+                    if(xmax<0 & xmin<0){
+                      lon    <- ncvar_get(nc, 'lon')-360
+                      lonunits <- "degrees_west"
+                    }else{
+                      lon  <- ncvar_get(nc, 'lon')
+                      lonunits <- "degrees_east"
+                    }
 
-                  # Read variables
-                  if(var=='hurs'){
-                    dat      <- ncvar_get(nc, var)
-                    units    <- ncatt_get(nc,"hurs","units")$value
-                    longname <- ncatt_get(nc,"hurs","long_name")$value
-                    missval  <- ncatt_get(nc,"hurs","_FillValue")$value
-                  }
-                  if(var=='huss'){
-                    dat      <- ncvar_get(nc, var)
-                    units    <- ncatt_get(nc,"huss","units")$value
-                    longname <- ncatt_get(nc,"huss","long_name")$value
-                    missval  <- ncatt_get(nc,"huss","_FillValue")$value
-                  }
-                  if(var=='pr'){
-                    dat      <- ncvar_get(nc, var)*86400
-                    units    <- 'mm/d'
-                    longname <- ncatt_get(nc,"pr","long_name")$value
-                    missval  <- ncatt_get(nc,"pr","_FillValue")$value*86400
-                  }
-                  if(var=='rlds'){
-                    dat      <- ncvar_get(nc, var)
-                    units    <- ncatt_get(nc,"rlds","units")$value
-                    longname <- ncatt_get(nc,"rlds","long_name")$value
-                    missval  <- ncatt_get(nc,"rlds","_FillValue")$value
-                  }
-                  if(var=='rsds'){
-                    dat      <- ncvar_get(nc, var)
-                    units    <- ncatt_get(nc,"rsds","units")$value
-                    longname <- ncatt_get(nc,"rsds","long_name")$value
-                    missval  <- ncatt_get(nc,"rsds","_FillValue")$value
-                  }
-                  if(var=='sfcWind'){
-                    dat      <- ncvar_get(nc, var)
-                    units    <- ncatt_get(nc,"sfcWind","units")$value
-                    longname <- ncatt_get(nc,"sfcWind","long_name")$value
-                    missval  <- ncatt_get(nc,"sfcWind","_FillValue")$value
-                  }
-                  if(var=='tas'){
-                    dat      <- ncvar_get(nc, var)-273
-                    units    <- 'Degrees Celsius'
-                    longname <- ncatt_get(nc,"tas","long_name")$value
-                    missval  <- ncatt_get(nc,"tas","_FillValue")$value-273
-                  }
-                  if(var=='tasmax'){
-                    dat      <- ncvar_get(nc, var)-273
-                    units    <- 'Degrees Celsius'
-                    longname <- ncatt_get(nc,"tasmax","long_name")$value
-                    missval  <- ncatt_get(nc,"tasmax","_FillValue")$value-273
-                  }
-                  if(var=='tasmin'){
-                    dat      <- ncvar_get(nc, var)-273
-                    units    <- 'Degrees Celsius'
-                    longname <- ncatt_get(nc,"tasmin","long_name")$value
-                    missval  <- ncatt_get(nc,"tasmin","_FillValue")$value-273
-                  }
+                    # Second dimension
+                    if(ymin<0){
+                      lat      <- ncvar_get(nc, 'lat')
+                      latunits <- "degrees_south"
+                    }else{
+                      lat      <- ncvar_get(nc, 'lat')
+                      latunits <- "degrees_north"
+                    }
 
-                  # Subsetting data
-                  lon_sub <- subset(lon, lon>=xmin & lon<=xmax)
-                  lat_sub <- rev(subset(lat, lat>=ymin & lat<=ymax))
-                  dat_sub <- dat[match(lon_sub, lon), match(lat_sub, lat),]
+                    # Third dimension
+                    time   <- ncvar_get(nc, 'time')
+                    tunits <- ncatt_get(nc,"time","units")$value
+                    ntime  <- length(time)
+                    if(ntime==360){
+                      calendar <- '360_day'
+                    }
+                    if(ntime==365){
+                      calendar <- '365_day'
+                    }
+                    if(ntime==366){
+                      calendar <- 'standard'
+                    }
 
-                  # Create a new netcdf file
-                  londim    <- ncdim_def(name="lon",
-                                         units=lonunits,
-                                         vals=as.double(lon_sub))
-                  latdim    <- ncdim_def(name="lat",
-                                         units=latunits,
-                                         vals=as.double(lat_sub))
-                  timedim   <- ncdim_def(name="time",
-                                         units=tunits,
-                                         vals=as.double(time),
-                                         calendar=calendar)
-                  vardef    <- ncvar_def(name=var,
-                                         units=units,
-                                         dim=list(londim,latdim,timedim),
-                                         missval=missval,
-                                         longname=longname,
-                                         prec="float")
-                  destfile <- file.path(location,var,per,mod,filename)
-                  ncnew    <- nc_create(filename=destfile,
-                                        vars=list(vardef),
-                                        force_v4=TRUE)
-                  ncvar_put(nc=ncnew,
-                            varid=vardef,
-                            vals=dat_sub)
-                  nc_close(nc)
-                  nc_close(ncnew)
-                  unlink(tempfile)
-                  gc()
+                    # Read variables
+                    if(var=='hurs'){
+                      dat      <- ncvar_get(nc, var)
+                      units    <- ncatt_get(nc,"hurs","units")$value
+                      longname <- ncatt_get(nc,"hurs","long_name")$value
+                      missval  <- ncatt_get(nc,"hurs","_FillValue")$value
+                    }
+                    if(var=='huss'){
+                      dat      <- ncvar_get(nc, var)
+                      units    <- ncatt_get(nc,"huss","units")$value
+                      longname <- ncatt_get(nc,"huss","long_name")$value
+                      missval  <- ncatt_get(nc,"huss","_FillValue")$value
+                    }
+                    if(var=='pr'){
+                      dat      <- ncvar_get(nc, var)*86400
+                      units    <- 'mm/d'
+                      longname <- ncatt_get(nc,"pr","long_name")$value
+                      missval  <- ncatt_get(nc,"pr","_FillValue")$value*86400
+                    }
+                    if(var=='rlds'){
+                      dat      <- ncvar_get(nc, var)
+                      units    <- ncatt_get(nc,"rlds","units")$value
+                      longname <- ncatt_get(nc,"rlds","long_name")$value
+                      missval  <- ncatt_get(nc,"rlds","_FillValue")$value
+                    }
+                    if(var=='rsds'){
+                      dat      <- ncvar_get(nc, var)
+                      units    <- ncatt_get(nc,"rsds","units")$value
+                      longname <- ncatt_get(nc,"rsds","long_name")$value
+                      missval  <- ncatt_get(nc,"rsds","_FillValue")$value
+                    }
+                    if(var=='sfcWind'){
+                      dat      <- ncvar_get(nc, var)
+                      units    <- ncatt_get(nc,"sfcWind","units")$value
+                      longname <- ncatt_get(nc,"sfcWind","long_name")$value
+                      missval  <- ncatt_get(nc,"sfcWind","_FillValue")$value
+                    }
+                    if(var=='tas'){
+                      dat      <- ncvar_get(nc, var)-273
+                      units    <- 'Degrees Celsius'
+                      longname <- ncatt_get(nc,"tas","long_name")$value
+                      missval  <- ncatt_get(nc,"tas","_FillValue")$value-273
+                    }
+                    if(var=='tasmax'){
+                      dat      <- ncvar_get(nc, var)-273
+                      units    <- 'Degrees Celsius'
+                      longname <- ncatt_get(nc,"tasmax","long_name")$value
+                      missval  <- ncatt_get(nc,"tasmax","_FillValue")$value-273
+                    }
+                    if(var=='tasmin'){
+                      dat      <- ncvar_get(nc, var)-273
+                      units    <- 'Degrees Celsius'
+                      longname <- ncatt_get(nc,"tasmin","long_name")$value
+                      missval  <- ncatt_get(nc,"tasmin","_FillValue")$value-273
+                    }
+
+                    # Subsetting data
+                    lon_sub <- subset(lon, lon>=xmin & lon<=xmax)
+                    lat_sub <- rev(subset(lat, lat>=ymin & lat<=ymax))
+                    dat_sub <- dat[match(lon_sub, lon), match(lat_sub, lat),]
+
+                    # Create a new netcdf file
+                    londim    <- ncdim_def(name="lon",
+                                           units=lonunits,
+                                           vals=as.double(lon_sub))
+                    latdim    <- ncdim_def(name="lat",
+                                           units=latunits,
+                                           vals=as.double(lat_sub))
+                    timedim   <- ncdim_def(name="time",
+                                           units=tunits,
+                                           vals=as.double(time),
+                                           calendar=calendar)
+                    vardef    <- ncvar_def(name=var,
+                                           units=units,
+                                           dim=list(londim,latdim,timedim),
+                                           missval=missval,
+                                           longname=longname,
+                                           prec="float")
+                    destfile <- file.path(location,var,per,mod,filename)
+                    ncnew    <- nc_create(filename=destfile,
+                                          vars=list(vardef),
+                                          force_v4=TRUE)
+                    ncvar_put(nc=ncnew,
+                              varid=vardef,
+                              vals=dat_sub)
+                    nc_close(nc)
+                    nc_close(ncnew)
+                    unlink(tempfile)
+                    gc()
+
                 }else{
-                  # Show error message
-                  message('ERROR: These filename is not available for downloading')
+                  # Download original data for the entire globe
+                  destfile <- file.path('.',var,per,mod,filename)
+                  download.file(url=url, destfile=destfile)
+                  gc()
                 }
-              }else{
-                # Download original data for the entire globe
-                destfile <- file.path('.',var,per,mod,filename)
-                switch   <- try(download.file(url=url, destfile=destfile))
-                gc()
-              }
+              }else
+                # Show error message
+                message('ERROR: There is no more data to download for this filename')
             }else{
               # Show error message
               message('ERROR: There is no more data to download from this scenario')

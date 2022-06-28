@@ -2,5 +2,6 @@
 
 export(gcm_download_data)
 import(RCurl)
+import(data.table)
 import(ncdf4)
 import(tictoc)
