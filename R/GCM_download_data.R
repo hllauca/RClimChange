@@ -37,9 +37,8 @@ gcm_download_data <- function(location,
 
   tic()
 
-  # Read available filenames
+  # List of available filenames
   x <- fread('https://portal.nccs.nasa.gov/datashare/nexgddp_cmip6/gddp-cmip6-thredds-fileserver.csv')
-  gfiles <- grep(pattern=paste0(var,'_day_',mod), x$fileUrl, value=T)
 
   # Available models
   gcm   <- c('UKESM1-0-LL',
@@ -211,6 +210,7 @@ gcm_download_data <- function(location,
               folder   <- paste0(mod,'/',per,'/',run,'/',var,'/')
               url      <- paste0('https://ds.nccs.nasa.gov/thredds2/fileServer/AMES/NEX/GDDP-CMIP6/',
                                  folder, filename)
+              gfiles   <- grep(pattern=paste0(var,'_day_',mod), x$fileUrl, value=T)
 
               # Check available files
               if(url %in% gfiles){
