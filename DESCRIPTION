@@ -12,6 +12,7 @@ Depends:
 Imports:
   ncdf4,
   RCurl,
+  data.table,
   tictoc
 LazyData: true
 RoxygenNote: 7.1.2
