@@ -23,7 +23,6 @@
 #'
 #' @import  ncdf4
 #' @import  RCurl
-#' @import  data.table
 #' @import  tictoc
 
 gcm_download_data <- function(location,
@@ -37,8 +36,8 @@ gcm_download_data <- function(location,
 
   tic()
 
-  # # List of available filenames
-  # x <- fread('https://portal.nccs.nasa.gov/datashare/nexgddp_cmip6/gddp-cmip6-thredds-fileserver.csv')
+  # Config timeout for big files
+  options(timeout = max(300, getOption("timeout")))
 
   # Available models
   gcm   <- c('UKESM1-0-LL',
@@ -210,17 +209,13 @@ gcm_download_data <- function(location,
               folder   <- paste0(mod,'/',per,'/',run,'/',var,'/')
               url      <- paste0('https://portal.nccs.nasa.gov/datashare/nexgddp_cmip6/',
                                  folder, filename)
-              # gfiles   <- grep(pattern=paste0(var,'_day_',mod), x$fileUrl, value=T)
-
-              # Check available files
-              # if(url %in% gfiles){
 
                 # Download and subsetting data
                 if(is.null(roi)==FALSE){
 
                     # Downloading raw data
                     tempfile <- file.path(location,var,per,mod,'temporal_file.nc')
-                    download.file(url=url, destfile=tempfile, method=method)
+                    download.file(url=url, destfile=tempfile, method=method, cacheOK=FALSE)
 
                     # Reading data
                     xmin    <- roi[1]
@@ -359,9 +354,6 @@ gcm_download_data <- function(location,
                   download.file(url=url, destfile=destfile)
                   gc()
                 }
-              # }else
-              #   # Show error message
-              #   message('ERROR: There is no data to download for this filename')
             }else{
               # Show error message
               message('ERROR: There is no more data to download from this scenario')
