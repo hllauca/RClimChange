@@ -248,6 +248,9 @@ gcm_download_data <- function(location,
                     time   <- ncvar_get(nc, 'time')
                     tunits <- ncatt_get(nc,"time","units")$value
                     ntime  <- length(time)
+                    if(ntime==364){
+                      calendar <- 'standard'
+                    }
                     if(ntime==360){
                       calendar <- '360_day'
                     }
