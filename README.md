@@ -5,7 +5,9 @@ This is an experimental package with a function for downloading and subsetting d
 
 Future implementations will consider additional functions to post-process and bias-correct this data set.
 
-Available GCMs
+Datashare-NEX-GDDP-CMIP6: https://portal.nccs.nasa.gov/datashare/nexgddp_cmip6/
+
+Available models:
 - UKESM1-0-LL
 - TaiESM1
 - NorESM2-MM
@@ -71,7 +73,7 @@ Summary
 - Latitude Resolution: 0.25 degrees (25 km)
 - Longitude Resolution: 0.25 degrees (25 km)
 - Temporal Resolution: daily
-- Total Dataset Size: 18 TB (without subsetting)
+- Total Dataset Size: 30 TB (without subsetting)
 
 
 Instructions
