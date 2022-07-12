@@ -179,7 +179,7 @@ gcm_download_data <- function(location,
                 filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr1_', yr,'.nc')
               }
               if(mod %in% c('GFDL-CM4_gr2')){
-                filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr2_', yr,'.nc')
+                filename <- paste0(var,'_day_GFDL-CM4_',per,'_',run,'_gr2_', yr,'.nc')
               }
               if(mod %in% c('UKESM1-0-LL',
                             'TaiESM1',
