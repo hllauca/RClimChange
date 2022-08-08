@@ -5,7 +5,7 @@ This is an experimental package with a function for downloading and subsetting d
 
 Future implementations will consider additional functions to post-process and bias-correct this data set.
 
-Datashare-NEX-GDDP-CMIP6: https://portal.nccs.nasa.gov/datashare/nexgddp_cmip6/
+NEX-GDDP-CMIP6: https://ds.nccs.nasa.gov/thredds/catalog/AMES/NEX/GDDP-CMIP6/catalog.html
 
 Available models:
 - UKESM1-0-LL
