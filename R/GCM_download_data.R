@@ -1,4 +1,4 @@
-#' Download CMIP6 daily data from NCCS THREDDS NEX-GDDP-CMIP6.
+#' Download daily GCM data from NCCS THREDDS NEX-GDDP-CMIP6.
 #' @param location Work directory to store downloaded data.
 #' @param model Model names to download. If NULL, all available models will be selected.
 #' @param scenario Choose the scenario to be downloaded ('historical','ssp126','ssp245', 'ssp370',or 'ssp585). Some models could haven't all scenarios.

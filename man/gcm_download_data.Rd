@@ -2,7 +2,7 @@
 % Please edit documentation in R/gcm_download_data.R
 \name{gcm_download_data}
 \alias{gcm_download_data}
-\title{Download CMIP6 daily data from NCCS THREDDS NEX-GDDP-CMIP6.}
+\title{Download daily GCM data from NCCS THREDDS NEX-GDDP-CMIP6.}
 \usage{
 gcm_download_data(
   location,
@@ -33,7 +33,7 @@ gcm_download_data(
 CMIP6 daily data (in netCDF format).
 }
 \description{
-Download CMIP6 daily data from NCCS THREDDS NEX-GDDP-CMIP6.
+Download daily GCM data from NCCS THREDDS NEX-GDDP-CMIP6.
 }
 \examples{
 # Load package
