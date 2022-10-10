@@ -207,7 +207,7 @@ gcm_download_data <- function(location,
                 filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gn_', yr,'.nc')
               }
               folder   <- paste0(mod,'/',per,'/',run,'/',var,'/')
-              url      <- paste0('https://ds.nccs.nasa.gov/thredds/fileServer/AMES/NEX/GDDP-CMIP6/',
+              url      <- paste0('https://nex-gddp-cmip6.s3.us-west-2.amazonaws.com/NEX-GDDP-CMIP6/',
                                  folder, filename)
               # url      <- paste0('https://portal.nccs.nasa.gov/datashare/nexgddp_cmip6/',
               #                    folder, filename)
