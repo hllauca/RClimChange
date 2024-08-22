@@ -26,9 +26,9 @@ gcm_download_data(
 
 \item{years}{Choose data years to be downloaded  (1950:2014 for 'historical' and 2015:2100 for 'ssp126', 'ssp245', 'ssp370' and 'ssp585').}
 
-\item{roi}{Vector of coordinates for subsetting data (xmin, xmax, ymin, ymax). If NULL, original extension data will be downloaded.}
+\item{roi}{Vector of coordinates for sub-setting data (xmin, xmax, ymin, ymax). If NULL, original extension data will be downloaded.}
 
-\item{version}{Select file version. Use NULL, v1.1 or v1.2 (please read technical notes in NEX website). NULL as default}
+\item{version}{Select file version. Use NULL, 'v1.1' or 'v1.2' (please read technical notes in NEX website). NULL as default}
 
 \item{method}{Method to be used for downloading files. Current download methods are 'internal', 'wininet' (Windows only), 'libcurl', 'wget' and 'curl'. The 'curl' method is recommended for Windows users.}
 }
@@ -48,6 +48,7 @@ gcm_download_data(location=getwd(),
                   scenario='historical',
                   variable='pr',
                   years=1990,
+                  version='v1.1',
                   roi=c(-86,-66,-20,2),
                   method='curl')
 

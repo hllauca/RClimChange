@@ -4,8 +4,8 @@
 #' @param scenario Choose the scenario to be downloaded ('historical','ssp126','ssp245', 'ssp370',or 'ssp585). Some models could haven't all scenarios.
 #' @param variable Choose the variable to be downloaded ('hurs','huss','pr','rlds','rsds','sfcWind','tas','tasmax', or 'tasmin').
 #' @param years Choose data years to be downloaded  (1950:2014 for 'historical' and 2015:2100 for 'ssp126', 'ssp245', 'ssp370' and 'ssp585').
-#' @param roi Vector of coordinates for subsetting data (xmin, xmax, ymin, ymax). If NULL, original extension data will be downloaded.
-#' @param version Select file version. Use NULL, v1.1 or v1.2 (please read technical notes in NEX website). NULL as default
+#' @param roi Vector of coordinates for sub-setting data (xmin, xmax, ymin, ymax). If NULL, original extension data will be downloaded.
+#' @param version Select file version. Use NULL, 'v1.1' or 'v1.2' (please read technical notes in NEX website). NULL as default
 #' @param method Method to be used for downloading files. Current download methods are 'internal', 'wininet' (Windows only), 'libcurl', 'wget' and 'curl'. The 'curl' method is recommended for Windows users.
 #' @return CMIP6 daily data (in netCDF format).
 #' @export
@@ -19,6 +19,7 @@
 #'                   scenario='historical',
 #'                   variable='pr',
 #'                   years=1990,
+#'                   version='v1.1',
 #'                   roi=c(-86,-66,-20,2),
 #'                   method='curl')
 #'
