@@ -5,6 +5,7 @@
 #' @param variable Choose the variable to be downloaded ('hurs','huss','pr','rlds','rsds','sfcWind','tas','tasmax', or 'tasmin').
 #' @param years Choose data years to be downloaded  (1950:2014 for 'historical' and 2015:2100 for 'ssp126', 'ssp245', 'ssp370' and 'ssp585').
 #' @param roi Vector of coordinates for subsetting data (xmin, xmax, ymin, ymax). If NULL, original extension data will be downloaded.
+#' @param version Select file version. Use NULL, v1.1 or v1.2 (please read technical notes in NEX website). NULL as default
 #' @param method Method to be used for downloading files. Current download methods are 'internal', 'wininet' (Windows only), 'libcurl', 'wget' and 'curl'. The 'curl' method is recommended for Windows users.
 #' @return CMIP6 daily data (in netCDF format).
 #' @export
@@ -31,6 +32,7 @@ gcm_download_data <- function(location,
                               variable,
                               years,
                               roi,
+                              version=NULL,
                               method='curl'){
 
 
@@ -169,17 +171,48 @@ gcm_download_data <- function(location,
                             'EC-Earth3',
                             'CNRM-ESM2-1',
                             'CNRM-CM6-1')){
-                filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr_', yr,'.nc')
+                if(is.null(version)==TRUE){
+                  filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr_', yr,'.nc')
+                }else{
+                  if(version=='v1.1'){
+                    filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr_', yr,'_v1.1.nc')
+                  }else{
+                    if(version=='v1.2'){
+                      filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr_', yr,'_v1.2.nc')
+                    }
+                  }
+                }
               }
               if(mod %in% c('KIOST-ESM',
                             'INM-CM5-0',
                             'INM-CM4-8',
                             'GFDL-ESM4',
                             'GFDL-CM4')){
-                filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr1_', yr,'.nc')
+                if(is.null(version)==TRUE){
+                  filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr1_', yr,'.nc')
+                }else{
+                  if(version=='v1.1'){
+                    filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr1_', yr,'_v1.1.nc')
+                  }else{
+                    if(version=='v1.2'){
+                     filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr1_', yr,'_v1.2.nc')
+                    }
+                  }
+                }
               }
               if(mod %in% c('GFDL-CM4_gr2')){
-                filename <- paste0(var,'_day_GFDL-CM4_',per,'_',run,'_gr2_', yr,'.nc')
+
+                if(is.null(version)==TRUE){
+                  filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr2_', yr,'.nc')
+                }else{
+                  if(version=='v1.1'){
+                    filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr2_', yr,'_v1.1.nc')
+                  }else{
+                    if(version=='v1.2'){
+                      filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gr2_', yr,'_v1.2.nc')
+                    }
+                  }
+                }
               }
               if(mod %in% c('UKESM1-0-LL',
                             'TaiESM1',
@@ -204,7 +237,17 @@ gcm_download_data <- function(location,
                             'BCC-CSM2-MR',
                             'ACCESS-ESM1-5',
                             'ACCESS-CM2')){
-                filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gn_', yr,'.nc')
+                if(is.null(version)==TRUE){
+                  filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gn_', yr,'.nc')
+                }else{
+                  if(version=='v1.1'){
+                    filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gn_', yr,'_v1.1.nc')
+                  }else{
+                    if(version=='v1.2'){
+                      filename <- paste0(var,'_day_',mod,'_',per,'_',run,'_gn_', yr,'_v1.2.nc')
+                    }
+                  }
+                }
               }
               folder   <- paste0(mod,'/',per,'/',run,'/',var,'/')
               url      <- paste0('https://nex-gddp-cmip6.s3.us-west-2.amazonaws.com/NEX-GDDP-CMIP6/',

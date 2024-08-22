@@ -1,7 +1,7 @@
 Package: RClimChange
 Type: Package
 Title: A package to manipulate Global Climate Models from NCCS THREDDS NEX-GDDP-CMIP6
-Version: 3.2.2
+Version: 3.3.0
 Author: Harold Llauca <hllauca@senamhi.gob.pe>
 Maintainer: Harold Llauca <hllauca@senamhi.gob.pe>
 Description: This package contain simple tools for downloading and subsetting daily GCM data from CMIP6.
@@ -14,4 +14,4 @@ Imports:
   RCurl,
   tictoc
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
