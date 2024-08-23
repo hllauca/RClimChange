@@ -16,24 +16,24 @@ gcm_download_data(
 )
 }
 \arguments{
-\item{location}{Work directory to store downloaded data.}
+\item{location}{Select the location for data downloading.}
 
-\item{model}{Model names to download. If NULL, all available models will be selected.}
+\item{model}{Model name. If NULL, all available models will be selected.}
 
-\item{scenario}{Choose the scenario to be downloaded ('historical','ssp126','ssp245', 'ssp370',or 'ssp585). Some models could haven't all scenarios.}
+\item{scenario}{CMIP6 scenario ('historical','ssp126','ssp245', 'ssp370', or 'ssp585).}
 
-\item{variable}{Choose the variable to be downloaded ('hurs','huss','pr','rlds','rsds','sfcWind','tas','tasmax', or 'tasmin').}
+\item{variable}{Variable ('hurs','huss','pr','rlds','rsds','sfcWind','tas','tasmax', or 'tasmin').}
 
-\item{years}{Choose data years to be downloaded  (1950:2014 for 'historical' and 2015:2100 for 'ssp126', 'ssp245', 'ssp370' and 'ssp585').}
+\item{years}{Data years (1950 - 2014 for 'historical' and 2015 - 2100 for 'ssp126', 'ssp245', 'ssp370' and 'ssp585').}
 
-\item{roi}{Vector of coordinates for sub-setting data (xmin, xmax, ymin, ymax). If NULL, original extension data will be downloaded.}
+\item{roi}{Extension for sub-setting gridded data (west, east, south, north). If NULL, original extension is considered.}
 
-\item{version}{Select file version. Use NULL, 'v1.1' or 'v1.2' (please read technical notes in NEX website). NULL as default}
+\item{version}{Select file version. Use NULL for first version, or 'v1.1' and 'v1.2'. Please read technical notes in NEX website.}
 
 \item{method}{Method to be used for downloading files. Current download methods are 'internal', 'wininet' (Windows only), 'libcurl', 'wget' and 'curl'. The 'curl' method is recommended for Windows users.}
 }
 \value{
-CMIP6 daily data (in netCDF format).
+CMIP6 daily data in netCDF format.
 }
 \description{
 Download daily GCM data from NCCS THREDDS NEX-GDDP-CMIP6.
@@ -42,12 +42,23 @@ Download daily GCM data from NCCS THREDDS NEX-GDDP-CMIP6.
 # Load package
 require(RClimChange)
 
-# Download daily precipitation (in mm/d) from the BCC-CSM2-MR model; for 1990 and the Peruvian domain
+# Download daily precipitation from the BCC-CSM2-MR model
+# from historical period
 gcm_download_data(location=getwd(),
                   model='BCC-CSM2-MR',
                   scenario='historical',
                   variable='pr',
                   years=1990,
+                  version='v1.1',
+                  roi=c(-86,-66,-20,2),
+                  method='curl')
+
+# from ssp585 scenario
+gcm_download_data(location=getwd(),
+                  model='BCC-CSM2-MR',
+                  scenario='historical',
+                  variable='pr',
+                  years=1991:1992,
                   version='v1.1',
                   roi=c(-86,-66,-20,2),
                   method='curl')

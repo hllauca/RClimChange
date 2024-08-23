@@ -1,24 +1,35 @@
 #' Download daily GCM data from NCCS THREDDS NEX-GDDP-CMIP6.
-#' @param location Work directory to store downloaded data.
-#' @param model Model names to download. If NULL, all available models will be selected.
-#' @param scenario Choose the scenario to be downloaded ('historical','ssp126','ssp245', 'ssp370',or 'ssp585). Some models could haven't all scenarios.
-#' @param variable Choose the variable to be downloaded ('hurs','huss','pr','rlds','rsds','sfcWind','tas','tasmax', or 'tasmin').
-#' @param years Choose data years to be downloaded  (1950:2014 for 'historical' and 2015:2100 for 'ssp126', 'ssp245', 'ssp370' and 'ssp585').
-#' @param roi Vector of coordinates for sub-setting data (xmin, xmax, ymin, ymax). If NULL, original extension data will be downloaded.
-#' @param version Select file version. Use NULL, 'v1.1' or 'v1.2' (please read technical notes in NEX website). NULL as default
+#' @param location Select the location for data downloading.
+#' @param model Model name. If NULL, all available models will be selected.
+#' @param scenario CMIP6 scenario ('historical','ssp126','ssp245', 'ssp370', or 'ssp585).
+#' @param variable Variable ('hurs','huss','pr','rlds','rsds','sfcWind','tas','tasmax', or 'tasmin').
+#' @param years Data years (1950 - 2014 for 'historical' and 2015 - 2100 for 'ssp126', 'ssp245', 'ssp370' and 'ssp585').
+#' @param roi Extension for sub-setting gridded data (west, east, south, north). If NULL, original extension is considered.
+#' @param version Select file version. Use NULL for first version, or 'v1.1' and 'v1.2'. Please read technical notes in NEX website.
 #' @param method Method to be used for downloading files. Current download methods are 'internal', 'wininet' (Windows only), 'libcurl', 'wget' and 'curl'. The 'curl' method is recommended for Windows users.
-#' @return CMIP6 daily data (in netCDF format).
+#' @return CMIP6 daily data in netCDF format.
 #' @export
 #' @examples
 #' # Load package
 #' require(RClimChange)
 #'
-#' # Download daily precipitation (in mm/d) from the BCC-CSM2-MR model; for 1990 and the Peruvian domain
+#' # Download daily precipitation from the BCC-CSM2-MR model
+#' # from historical period
 #' gcm_download_data(location=getwd(),
 #'                   model='BCC-CSM2-MR',
 #'                   scenario='historical',
 #'                   variable='pr',
 #'                   years=1990,
+#'                   version='v1.1',
+#'                   roi=c(-86,-66,-20,2),
+#'                   method='curl')
+#'
+#' # from ssp585 scenario
+#' gcm_download_data(location=getwd(),
+#'                   model='BCC-CSM2-MR',
+#'                   scenario='historical',
+#'                   variable='pr',
+#'                   years=1991:1992,
 #'                   version='v1.1',
 #'                   roi=c(-86,-66,-20,2),
 #'                   method='curl')
@@ -35,7 +46,6 @@ gcm_download_data <- function(location,
                               roi,
                               version=NULL,
                               method='curl'){
-
 
   tic()
 
@@ -80,7 +90,7 @@ gcm_download_data <- function(location,
              'ACCESS-CM2')
 
   # If model is NULL
-  if(is.null(model)==TRUE){
+  if(is.null(model)){
      model <- gcm
   }
 
@@ -88,8 +98,15 @@ gcm_download_data <- function(location,
   nmodels <- length(model)
   nyrs    <- length(years)
 
+  # Check subsetting area
+  west  <- roi[1]
+  east  <- roi[2]
+  south <- roi[3]
+  north <- roi[4]
+
   # Loop by models
   for(i in 1:nmodels){
+
     # Loop by years
     for(j in 1:nyrs){
 
@@ -165,7 +182,7 @@ gcm_download_data <- function(location,
                 run <- 'r4i1p1f1'
               }
 
-              # Fix URLs from "https://ds.nccs.nasa.gov/thredds/catalog/AMES/NEX/GDDP-CMIP6/catalog.html"
+              # Create filename
               if(mod %in% c('KACE-1-0-G',
                             'IPSL-CM6A-LR',
                             'EC-Earth3-Veg-LR',
@@ -250,159 +267,22 @@ gcm_download_data <- function(location,
                   }
                 }
               }
+
+              # Create URL
               folder   <- paste0(mod,'/',per,'/',run,'/',var,'/')
-              url      <- paste0('https://nex-gddp-cmip6.s3.us-west-2.amazonaws.com/NEX-GDDP-CMIP6/',
-                                 folder, filename)
-              # url      <- paste0('https://portal.nccs.nasa.gov/datashare/nexgddp_cmip6/',
-              #                    folder, filename)
+              if(is.null(roi)){
+                url      <- paste0('https://nex-gddp-cmip6.s3.us-west-2.amazonaws.com/NEX-GDDP-CMIP6/', folder, filename)
+              }else{
+                url_base   <- 'https://ds.nccs.nasa.gov/thredds/ncss/grid/AMES/NEX/GDDP-CMIP6'
+                cut_region <- paste0('?var=',var,'&north=',north,'&west=-',west,'&east=',east,'&south=',south,'&horizStride=1&time_start=',yr,'-01-01T12:00:00Z&time_end=',yr,'-12-31T12:00:00Z&&&accept=netcdf3&addLatLon=true')
+                url        <- paste0(url_base,'/',folder,filename,cut_region)
+              }
 
-                # Download and subsetting data
-                if(is.null(roi)==FALSE){
+              # Download netcdf file
+              destfile <- file.path('.',var,per,mod,filename)
+              download.file(url=url, destfile=destfile, method=method, cacheOK=FALSE)
+              gc()
 
-                    # Downloading raw data
-                    tempfile <- file.path(location,var,per,mod,'temporal_file.nc')
-                    download.file(url=url, destfile=tempfile, method=method, cacheOK=FALSE)
-
-                    # Reading data
-                    xmin    <- roi[1]
-                    xmax    <- roi[2]
-                    ymin    <- roi[3]
-                    ymax    <- roi[4]
-
-                    # Open netcdf
-                    nc   <- nc_open(tempfile)
-
-                    # First dimension
-                    if(xmax<0 & xmin<0){
-                      lon    <- ncvar_get(nc, 'lon')-360
-                      lonunits <- "degrees_west"
-                    }else{
-                      lon  <- ncvar_get(nc, 'lon')
-                      lonunits <- "degrees_east"
-                    }
-
-                    # Second dimension
-                    if(ymin<0){
-                      lat      <- ncvar_get(nc, 'lat')
-                      latunits <- "degrees_south"
-                    }else{
-                      lat      <- ncvar_get(nc, 'lat')
-                      latunits <- "degrees_north"
-                    }
-
-                    # Third dimension
-                    time   <- ncvar_get(nc, 'time')
-                    tunits <- ncatt_get(nc,"time","units")$value
-                    ntime  <- length(time)
-                    if(ntime==364){
-                      calendar <- 'standard'
-                    }
-                    if(ntime==360){
-                      calendar <- '360_day'
-                    }
-                    if(ntime==365){
-                      calendar <- '365_day'
-                    }
-                    if(ntime==366){
-                      calendar <- 'standard'
-                    }
-
-                    # Read variables
-                    if(var=='hurs'){
-                      dat      <- ncvar_get(nc, var)
-                      units    <- ncatt_get(nc,"hurs","units")$value
-                      longname <- ncatt_get(nc,"hurs","long_name")$value
-                      missval  <- ncatt_get(nc,"hurs","_FillValue")$value
-                    }
-                    if(var=='huss'){
-                      dat      <- ncvar_get(nc, var)
-                      units    <- ncatt_get(nc,"huss","units")$value
-                      longname <- ncatt_get(nc,"huss","long_name")$value
-                      missval  <- ncatt_get(nc,"huss","_FillValue")$value
-                    }
-                    if(var=='pr'){
-                      dat      <- ncvar_get(nc, var)*86400
-                      units    <- 'mm/d'
-                      longname <- ncatt_get(nc,"pr","long_name")$value
-                      missval  <- ncatt_get(nc,"pr","_FillValue")$value*86400
-                    }
-                    if(var=='rlds'){
-                      dat      <- ncvar_get(nc, var)
-                      units    <- ncatt_get(nc,"rlds","units")$value
-                      longname <- ncatt_get(nc,"rlds","long_name")$value
-                      missval  <- ncatt_get(nc,"rlds","_FillValue")$value
-                    }
-                    if(var=='rsds'){
-                      dat      <- ncvar_get(nc, var)
-                      units    <- ncatt_get(nc,"rsds","units")$value
-                      longname <- ncatt_get(nc,"rsds","long_name")$value
-                      missval  <- ncatt_get(nc,"rsds","_FillValue")$value
-                    }
-                    if(var=='sfcWind'){
-                      dat      <- ncvar_get(nc, var)
-                      units    <- ncatt_get(nc,"sfcWind","units")$value
-                      longname <- ncatt_get(nc,"sfcWind","long_name")$value
-                      missval  <- ncatt_get(nc,"sfcWind","_FillValue")$value
-                    }
-                    if(var=='tas'){
-                      dat      <- ncvar_get(nc, var)-273
-                      units    <- 'Degrees Celsius'
-                      longname <- ncatt_get(nc,"tas","long_name")$value
-                      missval  <- ncatt_get(nc,"tas","_FillValue")$value-273
-                    }
-                    if(var=='tasmax'){
-                      dat      <- ncvar_get(nc, var)-273
-                      units    <- 'Degrees Celsius'
-                      longname <- ncatt_get(nc,"tasmax","long_name")$value
-                      missval  <- ncatt_get(nc,"tasmax","_FillValue")$value-273
-                    }
-                    if(var=='tasmin'){
-                      dat      <- ncvar_get(nc, var)-273
-                      units    <- 'Degrees Celsius'
-                      longname <- ncatt_get(nc,"tasmin","long_name")$value
-                      missval  <- ncatt_get(nc,"tasmin","_FillValue")$value-273
-                    }
-
-                    # Subsetting data
-                    lon_sub <- subset(lon, lon>=xmin & lon<=xmax)
-                    lat_sub <- rev(subset(lat, lat>=ymin & lat<=ymax))
-                    dat_sub <- dat[match(lon_sub, lon), match(lat_sub, lat),]
-
-                    # Create a new netcdf file
-                    londim    <- ncdim_def(name="lon",
-                                           units=lonunits,
-                                           vals=as.double(lon_sub))
-                    latdim    <- ncdim_def(name="lat",
-                                           units=latunits,
-                                           vals=as.double(lat_sub))
-                    timedim   <- ncdim_def(name="time",
-                                           units=tunits,
-                                           vals=as.double(time),
-                                           calendar=calendar)
-                    vardef    <- ncvar_def(name=var,
-                                           units=units,
-                                           dim=list(londim,latdim,timedim),
-                                           missval=missval,
-                                           longname=longname,
-                                           prec="float")
-                    destfile <- file.path(location,var,per,mod,filename)
-                    ncnew    <- nc_create(filename=destfile,
-                                          vars=list(vardef),
-                                          force_v4=TRUE)
-                    ncvar_put(nc=ncnew,
-                              varid=vardef,
-                              vals=dat_sub)
-                    nc_close(nc)
-                    nc_close(ncnew)
-                    unlink(tempfile)
-                    gc()
-
-                }else{
-                  # Download original data for the entire globe
-                  destfile <- file.path('.',var,per,mod,filename)
-                  download.file(url=url, destfile=destfile)
-                  gc()
-                }
             }else{
               # Show error message
               message('ERROR: There is no more data to download from this scenario')
@@ -421,7 +301,7 @@ gcm_download_data <- function(location,
       }
     } # End years
   } # End models
-# SHow message
+# Show message
 message('Done!')
 toc()
 }
