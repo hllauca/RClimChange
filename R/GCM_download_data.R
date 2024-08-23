@@ -1,4 +1,4 @@
-#' Download daily GCM data from NCCS THREDDS NEX-GDDP-CMIP6.
+#' Download daily GCM data from NCCS THREDDS NEX-GDDP-CMIP6 (https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6)
 #' @param location Select the location for data downloading.
 #' @param model Model name. If NULL, all available models will be selected.
 #' @param scenario CMIP6 scenario ('historical','ssp126','ssp245', 'ssp370', or 'ssp585).
@@ -13,40 +13,39 @@
 #' # Load package
 #' require(RClimChange)
 #'
-#' # Download daily precipitation flux from BCC-CSM2-MR model (https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6)
+#' # Download daily precipitation flux from BCC-CSM2-MR model
 #' # historical period
-#' gcm_download_data(location=getwd(),
-#'                   model='BCC-CSM2-MR',
-#'                   scenario='historical',
-#'                   variable='pr',
-#'                   years=1990,
-#'                   version='v1.1',
-#'                   roi=c(-86,-66,-20,2),
-#'                   method='curl')
+#' nex_download(location=getwd(),
+#'              model='BCC-CSM2-MR',
+#'              scenario='historical',
+#'              variable='pr',
+#'              years=1990:1992,
+#'              version='v1.1',
+#'              roi=c(-86,-66,-20,2),
+#'              method='curl')
 #'
 #' # ssp585 scenario
-#' gcm_download_data(location=getwd(),
-#'                   model='BCC-CSM2-MR',
-#'                   scenario='ssp585',
-#'                   variable='pr',
-#'                   years=2050,
-#'                   version='v1.1',
-#'                   roi=c(-86,-66,-20,2),
-#'                   method='curl')
+#' nex_download(location=getwd(),
+#'              model='BCC-CSM2-MR',
+#'              scenario='ssp585',
+#'              variable='pr',
+#'              years=2050:2052,
+#'              version='v1.1',
+#'              roi=c(-86,-66,-20,2),
+#'              method='curl')
 #'
 #' @import  ncdf4
 #' @import  RCurl
 #' @import  tictoc
 
-gcm_download_data <- function(location,
-                              model=NULL,
-                              scenario,
-                              variable,
-                              years,
-                              roi,
-                              version=NULL,
-                              method='curl'){
-
+nex_download <- function(location,
+                         model=NULL,
+                         scenario,
+                         variable,
+                         years,
+                         roi,
+                         version=NULL,
+                         method='curl'){
   tic()
 
   # Config timeout for big files
@@ -279,7 +278,7 @@ gcm_download_data <- function(location,
               }
 
               # Download netcdf file
-              destfile <- file.path('.',var,per,mod,filename)
+              destfile <- file.path(location,var,per,mod,filename)
               download.file(url=url, destfile=destfile, method=method, cacheOK=FALSE)
               gc()
 
