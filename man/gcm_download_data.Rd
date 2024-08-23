@@ -42,8 +42,8 @@ Download daily GCM data from NCCS THREDDS NEX-GDDP-CMIP6.
 # Load package
 require(RClimChange)
 
-# Download daily precipitation from the BCC-CSM2-MR model
-# from historical period
+# Download daily precipitation flux from BCC-CSM2-MR model (https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6)
+# historical period
 gcm_download_data(location=getwd(),
                   model='BCC-CSM2-MR',
                   scenario='historical',
@@ -53,12 +53,12 @@ gcm_download_data(location=getwd(),
                   roi=c(-86,-66,-20,2),
                   method='curl')
 
-# from ssp585 scenario
+# ssp585 scenario
 gcm_download_data(location=getwd(),
                   model='BCC-CSM2-MR',
-                  scenario='historical',
+                  scenario='ssp585',
                   variable='pr',
-                  years=1991:1992,
+                  years=2050,
                   version='v1.1',
                   roi=c(-86,-66,-20,2),
                   method='curl')

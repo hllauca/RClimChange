@@ -13,8 +13,8 @@
 #' # Load package
 #' require(RClimChange)
 #'
-#' # Download daily precipitation from the BCC-CSM2-MR model
-#' # from historical period
+#' # Download daily precipitation flux from BCC-CSM2-MR model (https://www.nccs.nasa.gov/services/data-collections/land-based-products/nex-gddp-cmip6)
+#' # historical period
 #' gcm_download_data(location=getwd(),
 #'                   model='BCC-CSM2-MR',
 #'                   scenario='historical',
@@ -24,12 +24,12 @@
 #'                   roi=c(-86,-66,-20,2),
 #'                   method='curl')
 #'
-#' # from ssp585 scenario
+#' # ssp585 scenario
 #' gcm_download_data(location=getwd(),
 #'                   model='BCC-CSM2-MR',
-#'                   scenario='historical',
+#'                   scenario='ssp585',
 #'                   variable='pr',
-#'                   years=1991:1992,
+#'                   years=2050,
 #'                   version='v1.1',
 #'                   roi=c(-86,-66,-20,2),
 #'                   method='curl')
@@ -274,7 +274,7 @@ gcm_download_data <- function(location,
                 url      <- paste0('https://nex-gddp-cmip6.s3.us-west-2.amazonaws.com/NEX-GDDP-CMIP6/', folder, filename)
               }else{
                 url_base   <- 'https://ds.nccs.nasa.gov/thredds/ncss/grid/AMES/NEX/GDDP-CMIP6'
-                cut_region <- paste0('?var=',var,'&north=',north,'&west=-',west,'&east=',east,'&south=',south,'&horizStride=1&time_start=',yr,'-01-01T12:00:00Z&time_end=',yr,'-12-31T12:00:00Z&&&accept=netcdf3&addLatLon=true')
+                cut_region <- paste0('?var=',var,'&north=',north,'&west=',west,'&east=',east,'&south=',south,'&horizStride=1&time_start=',yr,'-01-01T12:00:00Z&time_end=',yr,'-12-31T12:00:00Z&&&accept=netcdf3&addLatLon=true')
                 url        <- paste0(url_base,'/',folder,filename,cut_region)
               }
 
